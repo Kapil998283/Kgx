@@ -1,0 +1,313 @@
+/*-----------------------------------*\
+  #Team Index Page
+\*-----------------------------------*/
+
+@import url('../root.css');
+
+article {
+    background-color: var(--raisin-black-1);
+    min-height: 100vh;
+    padding: 90px 0;
+    position: relative;
+}
+
+/* Title */
+.section-title {
+    font-size: 3rem;
+    text-align: center;
+    color: var(--white);
+    margin-bottom: 4rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 4px;
+    background: var(--orange);
+    border-radius: 2px;
+}
+
+/* Search Bar */
+.search-bar {
+    max-width: 600px;
+    margin: 0 auto 3rem;
+    position: relative;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 1.2rem 1.5rem;
+    background-color: var(--raisin-black-2);
+    border: none;
+    border-radius: 12px;
+    color: var(--white);
+    font-size: 1rem;
+    outline: none;
+}
+
+.search-bar input::placeholder {
+    color: var(--light-gray);
+    opacity: 0.7;
+}
+
+.search-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: var(--orange);
+    color: var(--raisin-black-1);
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.search-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-50%) scale(1.05);
+}
+
+/* Team Cards Container */
+.team-cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 0 2rem;
+}
+
+/* Team Card */
+.team-card {
+    background-color: var(--raisin-black-2);
+    border-radius: 20px;
+    padding: 2.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+.team-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Create Team Card */
+.create-box {
+    background-color: var(--raisin-black-2);
+}
+
+.create-image {
+    width: 80px;
+    height: 80px;
+    background-color: var(--raisin-black-3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.create-image i {
+    font-size: 2rem;
+    color: var(--orange);
+}
+
+.create-box h3 {
+    color: var(--white);
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 1rem 0;
+}
+
+/* Sign in to Create Team Box */
+.signin-create {
+    background: linear-gradient(135deg, var(--raisin-black-2), var(--raisin-black-3));
+    border: 2px solid var(--orange);
+    position: relative;
+    overflow: hidden;
+}
+
+.signin-create::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 140, 0, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.signin-create:hover::before {
+    left: 100%;
+}
+
+.signin-create .create-image {
+    background: linear-gradient(135deg, var(--orange), #ff8c00);
+    box-shadow: 0 4px 15px rgba(255, 140, 0, 0.3);
+}
+
+.signin-create .create-image i {
+    color: var(--raisin-black-1);
+    font-weight: bold;
+}
+
+.signin-create h3 {
+    color: var(--orange);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.signin-btn {
+    background: linear-gradient(135deg, var(--orange), #ff8c00);
+    border: none;
+    box-shadow: 0 4px 15px rgba(255, 140, 0, 0.3);
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.signin-btn:hover {
+    box-shadow: 0 6px 20px rgba(255, 140, 0, 0.4);
+    transform: scale(1.05) translateY(-2px);
+}
+
+/* Disabled Create Team Box */
+.disabled-create {
+    background-color: var(--raisin-black-3);
+    opacity: 0.7;
+    cursor: not-allowed;
+    border: 2px solid var(--raisin-black-3);
+}
+
+.disabled-create:hover {
+    transform: none;
+}
+
+.disabled-create .create-image {
+    background-color: var(--raisin-black-1);
+}
+
+.disabled-create .create-image i {
+    color: var(--light-gray);
+}
+
+.disabled-create h3 {
+    color: var(--light-gray);
+}
+
+/* Team Info */
+.team-logo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.team-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.team-card h3 {
+    color: var(--white);
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.team-card p {
+    color: var(--light-gray);
+    font-size: 1rem;
+    margin: 0.3rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+/* Buttons */
+.rc-btn {
+    background-color: var(--orange);
+    color: var(--raisin-black-1);
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.rc-btn:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
+}
+
+.rc-btn.disabled {
+    background-color: var(--raisin-black-3);
+    color: var(--light-gray);
+    cursor: not-allowed;
+}
+
+.rc-btn.cancel-btn {
+    background-color: var(--raisin-black-3);
+    color: var(--orange);
+    border: 2px solid var(--orange);
+}
+
+.rc-btn.cancel-btn:hover {
+    background-color: var(--orange);
+    color: var(--raisin-black-1);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .team-cards-container {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        padding: 0 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 2.5rem;
+        margin-bottom: 3rem;
+    }
+
+    .search-bar input {
+        padding: 1rem 1.2rem;
+    }
+
+    .team-card {
+        padding: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .team-cards-container {
+        grid-template-columns: 1fr;
+        padding: 0 1rem;
+    }
+
+    .section-title {
+        font-size: 2rem;
+    }
+} 

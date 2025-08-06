@@ -1,0 +1,16 @@
+# Temporarily allow access for testing - REMOVE IN PRODUCTION
+# Order Deny,Allow
+# Deny from all
+
+# Allow access to admin files for now
+<Files "*.php">
+    Order Allow,Deny
+    Allow from all
+</Files>
+
+# Security headers
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options nosniff
+    Header always set X-Frame-Options DENY
+    Header always set X-XSS-Protection "1; mode=block"
+</IfModule>

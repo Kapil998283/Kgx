@@ -1,0 +1,7 @@
+# Deny all access to log files
+Order Deny,Allow
+Deny from all
+
+<Files "*.log">
+    Deny from all
+</Files>

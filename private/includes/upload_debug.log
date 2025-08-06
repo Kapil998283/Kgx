@@ -1,0 +1,363 @@
+[2025-08-03 18:44:53] POST request detected. Starting upload process.
+[2025-08-03 18:44:53] Match ID: 10
+[2025-08-03 18:44:53] User ID: 5
+[2025-08-03 18:44:53] POST data: {"upload_type":"kills","kills_claimed":"03","rank_claimed":"3","description":""}
+[2025-08-03 18:44:53] FILES data: {"screenshot":{"name":"9.jpg","full_path":"9.jpg","type":"image\/jpeg","tmp_name":"\/Applications\/XAMPP\/xamppfiles\/temp\/phpyQO2zP","error":0,"size":4057040}}
+[2025-08-03 18:44:53] Generated filename: user_5/match_10/688f60cd60847_kills.jpg
+[2025-08-03 18:44:53] Starting file upload to Supabase Storage...
+[2025-08-03 18:44:58] Exception caught: new row violates row-level security policy
+[2025-08-03 18:44:58] Exception trace: #0 /Applications/XAMPP/xamppfiles/htdocs/KGX/public/matches/upload.php(155): SupabaseClient->uploadFile('match-screensho...', 'user_5/match_10...', '/Applications/X...', 'image/jpeg')
+#1 {main}
+[2025-08-03 23:27:09] POST request detected. Starting upload process.
+[2025-08-03 23:27:09] Match ID: 10
+[2025-08-03 23:27:09] User ID: 5
+[2025-08-03 23:27:09] POST data: {"upload_type":"kills","kills_claimed":"020","rank_claimed":"3","description":""}
+[2025-08-03 23:27:09] FILES data: {"screenshot":{"name":"9.jpg","full_path":"9.jpg","type":"image\/jpeg","tmp_name":"\/Applications\/XAMPP\/xamppfiles\/temp\/php8qoC4l","error":0,"size":4057040}}
+[2025-08-03 23:27:09] Generated filename: user_5/match_10/688fa2f5e638b_kills.jpg
+[2025-08-03 23:27:09] Starting file upload to Supabase Storage...
+[2025-08-03 23:27:16] Upload result: {"Key":"match-screenshots\/user_5\/match_10\/688fa2f5e638b_kills.jpg","Id":"4cb8e7ff-bdc8-4c3a-a071-43c448af6c9d"}
+[2025-08-03 23:27:16] Generated public URL: https://xparbvjsubqptuaupwcd.supabase.co/storage/v1/object/public/match-screenshots/user_5/match_10/688fa2f5e638b_kills.jpg
+[2025-08-03 23:27:16] Preparing to insert data: {"match_id":10,"user_id":5,"image_path":"user_5\/match_10\/688fa2f5e638b_kills.jpg","image_url":"https:\/\/xparbvjsubqptuaupwcd.supabase.co\/storage\/v1\/object\/public\/match-screenshots\/user_5\/match_10\/688fa2f5e638b_kills.jpg","original_filename":"9.jpg","file_size":4057040,"upload_type":"kills","description":"","kills_claimed":20,"rank_claimed":3,"verified":false}
+[2025-08-03 23:27:16] Exception caught: Database connection failed: SQLSTATE[08006] [7] could not translate host name "db.xparbvjsubqptuaupwcd.supabase.co" to address: nodename nor servname provided, or not known
+[2025-08-03 23:27:16] Exception trace: #0 /Applications/XAMPP/xamppfiles/htdocs/KGX/private/includes/SupabaseClient.php(351): SupabaseClient->getConnection()
+#1 /Applications/XAMPP/xamppfiles/htdocs/KGX/private/includes/SupabaseClient.php(341): SupabaseClient->insertViaSql('match_screensho...', Array)
+#2 /Applications/XAMPP/xamppfiles/htdocs/KGX/public/matches/upload.php(178): SupabaseClient->insert('match_screensho...', Array)
+#3 {main}
+[2025-08-03 23:30:14] POST request detected. Starting upload process.
+[2025-08-03 23:30:14] Match ID: 10
+[2025-08-03 23:30:14] User ID: 5
+[2025-08-03 23:30:14] POST data: {"upload_type":"kills","kills_claimed":"020","rank_claimed":"3","description":""}
+[2025-08-03 23:30:14] FILES data: {"screenshot":{"name":"9.jpg","full_path":"9.jpg","type":"image\/jpeg","tmp_name":"\/Applications\/XAMPP\/xamppfiles\/temp\/phpMLQBTe","error":0,"size":4057040}}
+[2025-08-03 23:30:14] Generated filename: user_5/match_10/688fa3ae30ee1_kills.jpg
+[2025-08-03 23:30:14] Starting file upload to Supabase Storage...
+[2025-08-03 23:30:18] Upload result: {"Key":"match-screenshots\/user_5\/match_10\/688fa3ae30ee1_kills.jpg","Id":"6d6f8e54-3129-4395-a714-2323ad763f6d"}
+[2025-08-03 23:30:18] Generated public URL: https://xparbvjsubqptuaupwcd.supabase.co/storage/v1/object/public/match-screenshots/user_5/match_10/688fa3ae30ee1_kills.jpg
+[2025-08-03 23:30:18] Preparing to insert data: {"match_id":10,"user_id":5,"image_path":"user_5\/match_10\/688fa3ae30ee1_kills.jpg","image_url":"https:\/\/xparbvjsubqptuaupwcd.supabase.co\/storage\/v1\/object\/public\/match-screenshots\/user_5\/match_10\/688fa3ae30ee1_kills.jpg","original_filename":"9.jpg","file_size":4057040,"upload_type":"kills","description":"","kills_claimed":20,"rank_claimed":3,"verified":false}
+[2025-08-03 23:30:18] Insert result: null
+[2025-08-03 23:31:00] POST request detected. Starting upload process.
+[2025-08-03 23:31:00] Match ID: 10
+[2025-08-03 23:31:00] User ID: 5
+[2025-08-03 23:31:00] POST data: {"upload_type":"kills","kills_claimed":"045","rank_claimed":"5","description":""}
+[2025-08-03 23:31:00] FILES data: {"screenshot":{"name":"Screenshot 2025-08-03 at 11.28.15 PM.png","full_path":"Screenshot 2025-08-03 at 11.28.15 PM.png","type":"image\/png","tmp_name":"\/Applications\/XAMPP\/xamppfiles\/temp\/phpIcVuPg","error":0,"size":410696}}
+[2025-08-03 23:31:00] Generated filename: user_5/match_10/688fa3dca374e_kills.png
+[2025-08-03 23:31:00] Starting file upload to Supabase Storage...
+[2025-08-03 23:31:01] Upload result: {"Key":"match-screenshots\/user_5\/match_10\/688fa3dca374e_kills.png","Id":"a67d6d24-378f-48d7-8b90-81169acade1e"}
+[2025-08-03 23:31:01] Generated public URL: https://xparbvjsubqptuaupwcd.supabase.co/storage/v1/object/public/match-screenshots/user_5/match_10/688fa3dca374e_kills.png
+[2025-08-03 23:31:01] Preparing to insert data: {"match_id":10,"user_id":5,"image_path":"user_5\/match_10\/688fa3dca374e_kills.png","image_url":"https:\/\/xparbvjsubqptuaupwcd.supabase.co\/storage\/v1\/object\/public\/match-screenshots\/user_5\/match_10\/688fa3dca374e_kills.png","original_filename":"Screenshot 2025-08-03 at 11.28.15 PM.png","file_size":410696,"upload_type":"kills","description":"","kills_claimed":45,"rank_claimed":5,"verified":false}
+[2025-08-03 23:31:02] Insert result: null
+[2025-08-04 00:13:30] POST request detected. Starting upload process.
+[2025-08-04 00:13:30] Match ID: 10
+[2025-08-04 00:13:30] User ID: 5
+[2025-08-04 00:13:30] POST data: {"upload_option":"kill","kills_claimed":"0","description":"","rank_claimed":""}
+[2025-08-04 00:13:30] FILES data: {"kill_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0},"position_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0}}
+[2025-08-04 00:13:30] Exception caught: Please select a valid kill screenshot.
+[2025-08-04 00:13:30] Exception trace: #0 {main}
+[2025-08-04 08:56:58] POST request detected. Starting upload process.
+[2025-08-04 08:56:58] Match ID: 10
+[2025-08-04 08:56:58] User ID: 5
+[2025-08-04 08:56:58] POST data: {"upload_option":"kill","kills_claimed":"0","description":"","rank_claimed":""}
+[2025-08-04 08:56:58] FILES data: {"kill_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0},"position_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0}}
+[2025-08-04 08:56:58] Exception caught: Please select a valid kill screenshot.
+[2025-08-04 08:56:58] Exception trace: #0 {main}
+[2025-08-04 08:59:23] POST request detected. Starting upload process.
+[2025-08-04 08:59:23] Match ID: 10
+[2025-08-04 08:59:23] User ID: 5
+[2025-08-04 08:59:23] POST data: {"upload_option":"kill","kills_claimed":"0","description":"","rank_claimed":""}
+[2025-08-04 08:59:23] FILES data: {"kill_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0},"position_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0}}
+[2025-08-04 08:59:23] Exception caught: Please select a valid kill screenshot.
+[2025-08-04 08:59:23] Exception trace: #0 {main}
+[2025-08-04 09:08:36] POST request detected. Starting upload process.
+[2025-08-04 09:08:36] Match ID: 10
+[2025-08-04 09:08:36] User ID: 5
+[2025-08-04 09:08:36] POST data: {"upload_option":"kill","kills_claimed":"0","description":"","rank_claimed":""}
+[2025-08-04 09:08:36] FILES data: {"kill_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0},"position_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0}}
+[2025-08-04 09:08:36] Exception caught: Please select a valid kill screenshot.
+[2025-08-04 09:08:36] Exception trace: #0 {main}
+[2025-08-04 09:13:45] POST request detected. Starting upload process.
+[2025-08-04 09:13:45] Match ID: 10
+[2025-08-04 09:13:45] User ID: 5
+[2025-08-04 09:13:45] POST data: {"upload_option":"kill","kills_claimed":"0","description":"","rank_claimed":""}
+[2025-08-04 09:13:45] FILES data: {"kill_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0},"position_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0}}
+[2025-08-04 09:13:45] Exception caught: Please select a valid kill screenshot.
+[2025-08-04 09:13:45] Exception trace: #0 {main}
+[2025-08-04 09:30:39] POST request detected. Starting upload process.
+[2025-08-04 09:30:39] Match ID: 13
+[2025-08-04 09:30:39] User ID: 5
+[2025-08-04 09:30:39] POST data: {"upload_option":"kill","kills_claimed":"0","description":"","rank_claimed":""}
+[2025-08-04 09:30:39] FILES data: {"kill_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0},"position_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0}}
+[2025-08-04 09:30:39] Exception caught: Please select a valid kill screenshot.
+[2025-08-04 09:30:39] Exception trace: #0 {main}
+[2025-08-04 09:34:07] POST request detected. Starting upload process.
+[2025-08-04 09:34:07] Match ID: 13
+[2025-08-04 09:34:07] User ID: 4
+[2025-08-04 09:34:07] POST data: {"upload_option":"kill","kills_claimed":"0","description":"","rank_claimed":""}
+[2025-08-04 09:34:07] FILES data: {"kill_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0},"position_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0}}
+[2025-08-04 09:34:07] Exception caught: Please select a valid kill screenshot.
+[2025-08-04 09:34:07] Exception trace: #0 {main}
+[2025-08-04 09:44:48] POST request detected. Starting upload process.
+[2025-08-04 09:44:48] Match ID: 13
+[2025-08-04 09:44:48] User ID: 4
+[2025-08-04 09:44:48] POST data: {"upload_option":"kill","kills_claimed":"0","description":"","rank_claimed":""}
+[2025-08-04 09:44:48] FILES data: {"kill_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0},"position_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0}}
+[2025-08-04 09:44:48] All FILES data: {"kill_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0},"position_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0}}
+[2025-08-04 09:44:48] Looking for file key: kill_screenshot
+[2025-08-04 09:44:48] File upload error code: 4
+[2025-08-04 09:44:48] Exception caught: Upload error: No file was uploaded
+[2025-08-04 09:44:48] Exception trace: #0 {main}
+[2025-08-04 10:05:26] POST request detected. Starting upload process.
+[2025-08-04 10:05:26] Match ID: 13
+[2025-08-04 10:05:26] User ID: 5
+[2025-08-04 10:05:26] POST data: {"upload_option":"kill","kills_claimed":"0","description":"","rank_claimed":""}
+[2025-08-04 10:05:26] FILES data: {"kill_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0},"position_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0}}
+[2025-08-04 10:05:26] All FILES data: {"kill_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0},"position_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0}}
+[2025-08-04 10:05:26] Looking for file key: kill_screenshot
+[2025-08-04 10:05:26] File upload error code: 4
+[2025-08-04 10:05:26] Exception caught: Upload error: No file was uploaded
+[2025-08-04 10:05:26] Exception trace: #0 {main}
+[2025-08-04 10:09:35] POST request detected. Starting upload process.
+[2025-08-04 10:09:35] Match ID: 13
+[2025-08-04 10:09:35] User ID: 5
+[2025-08-04 10:09:35] POST data: {"upload_option":"kill","kills_claimed":"0","description":"","rank_claimed":""}
+[2025-08-04 10:09:35] FILES data: {"kill_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0},"position_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0}}
+[2025-08-04 10:09:35] All FILES data: {"kill_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0},"position_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0}}
+[2025-08-04 10:09:35] Looking for file key: kill_screenshot
+[2025-08-04 10:09:35] File upload error code: 4
+[2025-08-04 10:09:35] Exception caught: Upload error: No file was uploaded
+[2025-08-04 10:09:35] Exception trace: #0 {main}
+[2025-08-04 10:18:08] POST request detected. Starting upload process.
+[2025-08-04 10:18:08] Match ID: 13
+[2025-08-04 10:18:08] User ID: 5
+[2025-08-04 10:18:08] POST data: {"kills_claimed":"05","description":"","rank_claimed":"1","upload_option":"both"}
+[2025-08-04 10:18:08] FILES data: {"kill_screenshot":{"name":"9.jpg","full_path":"9.jpg","type":"image\/jpeg","tmp_name":"\/Applications\/XAMPP\/xamppfiles\/temp\/php1ZNz9M","error":0,"size":4057040},"position_screenshot":{"name":"6.jpg","full_path":"6.jpg","type":"image\/jpeg","tmp_name":"\/Applications\/XAMPP\/xamppfiles\/temp\/php9auQup","error":0,"size":1185048}}
+[2025-08-04 10:18:08] All FILES data: {"kill_screenshot":{"name":"9.jpg","full_path":"9.jpg","type":"image\/jpeg","tmp_name":"\/Applications\/XAMPP\/xamppfiles\/temp\/php1ZNz9M","error":0,"size":4057040},"position_screenshot":{"name":"6.jpg","full_path":"6.jpg","type":"image\/jpeg","tmp_name":"\/Applications\/XAMPP\/xamppfiles\/temp\/php9auQup","error":0,"size":1185048}}
+[2025-08-04 10:18:08] Generated filename for kill: user_5/match_13/68903b88409da_kill.jpg
+[2025-08-04 10:18:08] Starting kill file upload to Supabase Storage...
+[2025-08-04 10:18:13] Upload result for kill: {"Key":"match-screenshots\/user_5\/match_13\/68903b88409da_kill.jpg","Id":"7483ac12-c197-4d7b-a44d-ad774a1e7b95"}
+[2025-08-04 10:18:13] Generated public URL for kill: https://xparbvjsubqptuaupwcd.supabase.co/storage/v1/object/public/match-screenshots/user_5/match_13/68903b88409da_kill.jpg
+[2025-08-04 10:18:13] Preparing to insert kill data: {"match_id":13,"user_id":5,"image_path":"user_5\/match_13\/68903b88409da_kill.jpg","image_url":"https:\/\/xparbvjsubqptuaupwcd.supabase.co\/storage\/v1\/object\/public\/match-screenshots\/user_5\/match_13\/68903b88409da_kill.jpg","original_filename":"9.jpg","file_size":4057040,"upload_type":"kill","description":"","kills_claimed":5,"rank_claimed":1,"verified":false}
+[2025-08-04 10:18:13] Exception caught: new row for relation "match_screenshots" violates check constraint "match_screenshots_upload_type_check"
+[2025-08-04 10:18:13] Exception trace: #0 /Applications/XAMPP/xamppfiles/htdocs/KGX/private/includes/SupabaseClient.php(340): SupabaseClient->makeRequest('POST', 'match_screensho...', Array)
+#1 /Applications/XAMPP/xamppfiles/htdocs/KGX/public/matches/upload.php(240): SupabaseClient->insert('match_screensho...', Array)
+#2 {main}
+[2025-08-04 10:22:11] POST request detected. Starting upload process.
+[2025-08-04 10:22:11] Match ID: 13
+[2025-08-04 10:22:11] User ID: 5
+[2025-08-04 10:22:11] POST data: {"kills_claimed":"05","description":"","rank_claimed":"1","upload_option":"both"}
+[2025-08-04 10:22:11] FILES data: {"kill_screenshot":{"name":"6.jpg","full_path":"6.jpg","type":"image\/jpeg","tmp_name":"\/Applications\/XAMPP\/xamppfiles\/temp\/phpekzyHf","error":0,"size":1185048},"position_screenshot":{"name":"9.jpg","full_path":"9.jpg","type":"image\/jpeg","tmp_name":"\/Applications\/XAMPP\/xamppfiles\/temp\/phpUVWIns","error":0,"size":4057040}}
+[2025-08-04 10:22:11] All FILES data: {"kill_screenshot":{"name":"6.jpg","full_path":"6.jpg","type":"image\/jpeg","tmp_name":"\/Applications\/XAMPP\/xamppfiles\/temp\/phpekzyHf","error":0,"size":1185048},"position_screenshot":{"name":"9.jpg","full_path":"9.jpg","type":"image\/jpeg","tmp_name":"\/Applications\/XAMPP\/xamppfiles\/temp\/phpUVWIns","error":0,"size":4057040}}
+[2025-08-04 10:22:11] Generated filename for kills: user_5/match_13/68903c7ba6270_kills.jpg
+[2025-08-04 10:22:11] Starting kills file upload to Supabase Storage...
+[2025-08-04 10:22:14] Upload result for kills: {"Key":"match-screenshots\/user_5\/match_13\/68903c7ba6270_kills.jpg","Id":"f18bae2b-4413-4c24-8e4e-00e80c7775c1"}
+[2025-08-04 10:22:14] Generated public URL for kills: https://xparbvjsubqptuaupwcd.supabase.co/storage/v1/object/public/match-screenshots/user_5/match_13/68903c7ba6270_kills.jpg
+[2025-08-04 10:22:14] Preparing to insert kills data: {"match_id":13,"user_id":5,"image_path":"user_5\/match_13\/68903c7ba6270_kills.jpg","image_url":"https:\/\/xparbvjsubqptuaupwcd.supabase.co\/storage\/v1\/object\/public\/match-screenshots\/user_5\/match_13\/68903c7ba6270_kills.jpg","original_filename":"6.jpg","file_size":1185048,"upload_type":"kills","description":"","kills_claimed":5,"rank_claimed":1,"verified":false}
+[2025-08-04 10:22:14] Insert result for kills: null
+[2025-08-04 10:22:14] Exception caught: Failed to save kills screenshot to database.
+[2025-08-04 10:22:14] Exception trace: #0 {main}
+[2025-08-04 10:48:10] POST request detected. Starting upload process.
+[2025-08-04 10:48:10] Match ID: 13
+[2025-08-04 10:48:10] User ID: 4
+[2025-08-04 10:48:10] POST data: {"kills_claimed":"05","description":"please it should work now \r\n","rank_claimed":"1","upload_option":"both"}
+[2025-08-04 10:48:10] FILES data: {"kill_screenshot":{"name":"Screenshot 2025-08-03 at 7.44.21 AM.png","full_path":"Screenshot 2025-08-03 at 7.44.21 AM.png","type":"image\/png","tmp_name":"\/Applications\/XAMPP\/xamppfiles\/temp\/phphXRchJ","error":0,"size":80353},"position_screenshot":{"name":"KGX.jpeg","full_path":"KGX.jpeg","type":"image\/jpeg","tmp_name":"\/Applications\/XAMPP\/xamppfiles\/temp\/php8hO7WC","error":0,"size":102978}}
+[2025-08-04 10:48:10] All FILES data: {"kill_screenshot":{"name":"Screenshot 2025-08-03 at 7.44.21 AM.png","full_path":"Screenshot 2025-08-03 at 7.44.21 AM.png","type":"image\/png","tmp_name":"\/Applications\/XAMPP\/xamppfiles\/temp\/phphXRchJ","error":0,"size":80353},"position_screenshot":{"name":"KGX.jpeg","full_path":"KGX.jpeg","type":"image\/jpeg","tmp_name":"\/Applications\/XAMPP\/xamppfiles\/temp\/php8hO7WC","error":0,"size":102978}}
+[2025-08-04 10:48:10] Generated filename for kills: user_4/match_13/68904292ab0f8_kills.png
+[2025-08-04 10:48:10] Starting kills file upload to Supabase Storage...
+[2025-08-04 10:48:11] Upload result for kills: {"Key":"match-screenshots\/user_4\/match_13\/68904292ab0f8_kills.png","Id":"82ef06ee-9d4a-4d94-94cd-f001ec6089a6"}
+[2025-08-04 10:48:11] Generated public URL for kills: https://xparbvjsubqptuaupwcd.supabase.co/storage/v1/object/public/match-screenshots/user_4/match_13/68904292ab0f8_kills.png
+[2025-08-04 10:48:11] Preparing to insert kills data: {"match_id":13,"user_id":4,"image_path":"user_4\/match_13\/68904292ab0f8_kills.png","image_url":"https:\/\/xparbvjsubqptuaupwcd.supabase.co\/storage\/v1\/object\/public\/match-screenshots\/user_4\/match_13\/68904292ab0f8_kills.png","original_filename":"Screenshot 2025-08-03 at 7.44.21 AM.png","file_size":80353,"upload_type":"kills","description":"please it should work now","kills_claimed":5,"rank_claimed":1,"verified":false}
+[2025-08-04 10:48:12] Exception caught: Database connection failed: SQLSTATE[08006] [7] could not translate host name "db.xparbvjsubqptuaupwcd.supabase.co" to address: nodename nor servname provided, or not known
+[2025-08-04 10:48:12] Exception trace: #0 /Applications/XAMPP/xamppfiles/htdocs/KGX/private/includes/SupabaseClient.php(379): SupabaseClient->getConnection()
+#1 /Applications/XAMPP/xamppfiles/htdocs/KGX/private/includes/SupabaseClient.php(371): SupabaseClient->insertViaSql('match_screensho...', Array)
+#2 /Applications/XAMPP/xamppfiles/htdocs/KGX/public/matches/upload.php(243): SupabaseClient->insert('match_screensho...', Array)
+#3 {main}
+[2025-08-04 10:51:29] POST request detected. Starting upload process.
+[2025-08-04 10:51:29] Match ID: 13
+[2025-08-04 10:51:29] User ID: 4
+[2025-08-04 10:51:29] POST data: {"kills_claimed":"0","description":"","upload_option":"position","rank_claimed":""}
+[2025-08-04 10:51:29] FILES data: {"kill_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0},"position_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0}}
+[2025-08-04 10:51:29] Exception caught: Rank must be between 1 and 100.
+[2025-08-04 10:51:29] Exception trace: #0 {main}
+[2025-08-04 10:52:32] POST request detected. Starting upload process.
+[2025-08-04 10:52:32] Match ID: 13
+[2025-08-04 10:52:32] User ID: 4
+[2025-08-04 10:52:32] POST data: {"kills_claimed":"0","description":"","upload_option":"position","rank_claimed":""}
+[2025-08-04 10:52:32] FILES data: {"kill_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0},"position_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0}}
+[2025-08-04 10:52:32] Exception caught: Rank must be between 1 and 100.
+[2025-08-04 10:52:32] Exception trace: #0 {main}
+[2025-08-04 10:56:20] POST request detected. Starting upload process.
+[2025-08-04 10:56:20] Match ID: 13
+[2025-08-04 10:56:20] User ID: 4
+[2025-08-04 10:56:20] POST data: {"kills_claimed":"05","description":"please it should work now \r\n","upload_option":"position","rank_claimed":"1"}
+[2025-08-04 10:56:20] FILES data: {"kill_screenshot":{"name":"Screenshot 2025-08-03 at 7.44.21 AM.png","full_path":"Screenshot 2025-08-03 at 7.44.21 AM.png","type":"image\/png","tmp_name":"\/Applications\/XAMPP\/xamppfiles\/temp\/phpQQdFU7","error":0,"size":80353},"position_screenshot":{"name":"KGX.jpeg","full_path":"KGX.jpeg","type":"image\/jpeg","tmp_name":"\/Applications\/XAMPP\/xamppfiles\/temp\/phpqgewmz","error":0,"size":102978}}
+[2025-08-04 10:56:20] Upload option: position
+[2025-08-04 10:56:20] Kills claimed: 5
+[2025-08-04 10:56:20] Rank claimed (raw): 1
+[2025-08-04 10:56:20] Rank claimed (processed): 1
+[2025-08-04 10:56:20] Description: please it should work now
+[2025-08-04 10:56:20] All FILES data: {"kill_screenshot":{"name":"Screenshot 2025-08-03 at 7.44.21 AM.png","full_path":"Screenshot 2025-08-03 at 7.44.21 AM.png","type":"image\/png","tmp_name":"\/Applications\/XAMPP\/xamppfiles\/temp\/phpQQdFU7","error":0,"size":80353},"position_screenshot":{"name":"KGX.jpeg","full_path":"KGX.jpeg","type":"image\/jpeg","tmp_name":"\/Applications\/XAMPP\/xamppfiles\/temp\/phpqgewmz","error":0,"size":102978}}
+[2025-08-04 10:56:20] Looking for file key: position_screenshot
+[2025-08-04 10:56:20] Generated filename for rank: user_4/match_13/6890447c58f5e_rank.jpg
+[2025-08-04 10:56:20] Starting rank file upload to Supabase Storage...
+[2025-08-04 10:56:21] Upload result for rank: {"Key":"match-screenshots\/user_4\/match_13\/6890447c58f5e_rank.jpg","Id":"2780ce90-43b2-49a6-ba32-97cfca4c6c70"}
+[2025-08-04 10:56:21] Generated public URL for rank: https://xparbvjsubqptuaupwcd.supabase.co/storage/v1/object/public/match-screenshots/user_4/match_13/6890447c58f5e_rank.jpg
+[2025-08-04 10:56:21] Preparing to insert rank data: {"match_id":13,"user_id":4,"image_path":"user_4\/match_13\/6890447c58f5e_rank.jpg","image_url":"https:\/\/xparbvjsubqptuaupwcd.supabase.co\/storage\/v1\/object\/public\/match-screenshots\/user_4\/match_13\/6890447c58f5e_rank.jpg","original_filename":"KGX.jpeg","file_size":102978,"upload_type":"rank","description":"please it should work now","kills_claimed":0,"rank_claimed":1,"verified":false}
+[2025-08-04 10:56:21] Exception caught: Database connection failed: SQLSTATE[08006] [7] could not translate host name "db.xparbvjsubqptuaupwcd.supabase.co" to address: nodename nor servname provided, or not known
+[2025-08-04 10:56:21] Exception trace: #0 /Applications/XAMPP/xamppfiles/htdocs/KGX/private/includes/SupabaseClient.php(379): SupabaseClient->getConnection()
+#1 /Applications/XAMPP/xamppfiles/htdocs/KGX/private/includes/SupabaseClient.php(371): SupabaseClient->insertViaSql('match_screensho...', Array)
+#2 /Applications/XAMPP/xamppfiles/htdocs/KGX/public/matches/upload.php(250): SupabaseClient->insert('match_screensho...', Array)
+#3 {main}
+[2025-08-04 11:01:16] POST request detected. Starting upload process.
+[2025-08-04 11:01:16] Match ID: 13
+[2025-08-04 11:01:16] User ID: 4
+[2025-08-04 11:01:16] POST data: {"kills_claimed":"0","description":"","upload_option":"position","rank_claimed":""}
+[2025-08-04 11:01:16] FILES data: {"kill_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0},"position_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0}}
+[2025-08-04 11:01:16] Upload option: position
+[2025-08-04 11:01:16] Kills claimed: 0
+[2025-08-04 11:01:16] Rank claimed (raw): 
+[2025-08-04 11:01:16] Rank claimed (processed): null
+[2025-08-04 11:01:16] Description: 
+[2025-08-04 11:01:16] Exception caught: Rank must be between 1 and 100.
+[2025-08-04 11:01:16] Exception trace: #0 {main}
+[2025-08-04 11:01:29] POST request detected. Starting upload process.
+[2025-08-04 11:01:29] Match ID: 13
+[2025-08-04 11:01:29] User ID: 4
+[2025-08-04 11:01:29] POST data: {"kills_claimed":"0","description":"","upload_option":"position","rank_claimed":""}
+[2025-08-04 11:01:29] FILES data: {"kill_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0},"position_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0}}
+[2025-08-04 11:01:29] Upload option: position
+[2025-08-04 11:01:29] Kills claimed: 0
+[2025-08-04 11:01:29] Rank claimed (raw): 
+[2025-08-04 11:01:29] Rank claimed (processed): null
+[2025-08-04 11:01:29] Description: 
+[2025-08-04 11:01:29] Exception caught: Rank must be between 1 and 100.
+[2025-08-04 11:01:29] Exception trace: #0 {main}
+[2025-08-04 11:03:00] POST request detected. Starting upload process.
+[2025-08-04 11:03:00] Match ID: 13
+[2025-08-04 11:03:00] User ID: 4
+[2025-08-04 11:03:00] POST data: {"kills_claimed":"0","description":"","upload_option":"position","rank_claimed":""}
+[2025-08-04 11:03:00] FILES data: {"kill_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0},"position_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0}}
+[2025-08-04 11:03:00] Upload option: position
+[2025-08-04 11:03:00] Kills claimed: 0
+[2025-08-04 11:03:00] Rank claimed (raw): 
+[2025-08-04 11:03:00] Rank claimed (processed): null
+[2025-08-04 11:03:00] Description: 
+[2025-08-04 11:03:00] Exception caught: Rank must be between 1 and 100.
+[2025-08-04 11:03:00] Exception trace: #0 {main}
+[2025-08-04 11:17:36] POST request detected. Starting upload process.
+[2025-08-04 11:17:36] Match ID: 13
+[2025-08-04 11:17:36] User ID: 4
+[2025-08-04 11:17:36] POST data: {"kills_claimed":"0","description":"","upload_option":"position","rank_claimed":""}
+[2025-08-04 11:17:36] FILES data: {"kill_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0},"position_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0}}
+[2025-08-04 11:17:36] Kills claimed: 0
+[2025-08-04 11:17:36] Rank claimed (raw): 
+[2025-08-04 11:17:36] Rank claimed (processed): null
+[2025-08-04 11:17:36] Won match: no
+[2025-08-04 11:17:36] Description: 
+[2025-08-04 11:17:36] Result screenshot error: not set
+[2025-08-04 11:17:36] Exception caught: Please select a valid match result screenshot.
+[2025-08-04 11:17:36] Exception trace: #0 {main}
+[2025-08-04 11:26:39] POST request detected. Starting upload process.
+[2025-08-04 11:26:39] Match ID: 13
+[2025-08-04 11:26:39] User ID: 4
+[2025-08-04 11:26:39] POST data: {"kills_claimed":"03","rank_claimed":"","description":""}
+[2025-08-04 11:26:39] FILES data: {"result_screenshot":{"name":"Screenshot 2025-08-04 at 10.48.53 AM.png","full_path":"Screenshot 2025-08-04 at 10.48.53 AM.png","type":"image\/png","tmp_name":"\/Applications\/XAMPP\/xamppfiles\/temp\/phpdEzrkz","error":0,"size":396145},"winner_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0}}
+[2025-08-04 11:26:39] Kills claimed: 3
+[2025-08-04 11:26:39] Rank claimed (raw): 
+[2025-08-04 11:26:39] Rank claimed (processed): null
+[2025-08-04 11:26:39] Won match: no
+[2025-08-04 11:26:39] Description: 
+[2025-08-04 11:26:39] Generated filename for result: user_4/match_13/68904b976c5cc_result.png
+[2025-08-04 11:26:39] Starting result file upload to Supabase Storage...
+[2025-08-04 11:26:40] Upload result for result: {"Key":"match-screenshots\/user_4\/match_13\/68904b976c5cc_result.png","Id":"8f40109b-bddd-48ce-9cc3-f56b65689fa5"}
+[2025-08-04 11:26:40] Generated public URL for result: https://xparbvjsubqptuaupwcd.supabase.co/storage/v1/object/public/match-screenshots/user_4/match_13/68904b976c5cc_result.png
+[2025-08-04 11:26:40] Preparing to insert result data: {"match_id":13,"user_id":4,"image_path":"user_4\/match_13\/68904b976c5cc_result.png","image_url":"https:\/\/xparbvjsubqptuaupwcd.supabase.co\/storage\/v1\/object\/public\/match-screenshots\/user_4\/match_13\/68904b976c5cc_result.png","original_filename":"Screenshot 2025-08-04 at 10.48.53 AM.png","file_size":396145,"upload_type":"result","description":"","kills_claimed":3,"rank_claimed":null,"won_match":false,"verified":false}
+[2025-08-04 11:26:40] Exception caught: Insert operation failed - no data returned from API
+[2025-08-04 11:26:40] Exception trace: #0 /Applications/XAMPP/xamppfiles/htdocs/KGX/public/matches/upload.php(206): SupabaseClient->insert('match_screensho...', Array)
+#1 {main}
+[2025-08-04 11:28:12] POST request detected. Starting upload process.
+[2025-08-04 11:28:12] Match ID: 13
+[2025-08-04 11:28:12] User ID: 5
+[2025-08-04 11:28:12] POST data: {"won_match":"yes","kills_claimed":"03","rank_claimed":"1","description":""}
+[2025-08-04 11:28:12] FILES data: {"result_screenshot":{"name":"Screenshot 2025-08-04 at 10.14.41 AM.png","full_path":"Screenshot 2025-08-04 at 10.14.41 AM.png","type":"image\/png","tmp_name":"\/Applications\/XAMPP\/xamppfiles\/temp\/phpTBf6Fl","error":0,"size":373183},"winner_screenshot":{"name":"Screenshot 2025-08-04 at 10.01.26 AM.png","full_path":"Screenshot 2025-08-04 at 10.01.26 AM.png","type":"image\/png","tmp_name":"\/Applications\/XAMPP\/xamppfiles\/temp\/php8k2fgI","error":0,"size":301798}}
+[2025-08-04 11:28:12] Kills claimed: 3
+[2025-08-04 11:28:12] Rank claimed (raw): 1
+[2025-08-04 11:28:12] Rank claimed (processed): 1
+[2025-08-04 11:28:12] Won match: yes
+[2025-08-04 11:28:12] Description: 
+[2025-08-04 11:28:12] Generated filename for result: user_5/match_13/68904bf4471c1_result.png
+[2025-08-04 11:28:12] Starting result file upload to Supabase Storage...
+[2025-08-04 11:28:13] Upload result for result: {"Key":"match-screenshots\/user_5\/match_13\/68904bf4471c1_result.png","Id":"670f845b-0ac6-4a64-830c-b58274c468f1"}
+[2025-08-04 11:28:13] Generated public URL for result: https://xparbvjsubqptuaupwcd.supabase.co/storage/v1/object/public/match-screenshots/user_5/match_13/68904bf4471c1_result.png
+[2025-08-04 11:28:13] Preparing to insert result data: {"match_id":13,"user_id":5,"image_path":"user_5\/match_13\/68904bf4471c1_result.png","image_url":"https:\/\/xparbvjsubqptuaupwcd.supabase.co\/storage\/v1\/object\/public\/match-screenshots\/user_5\/match_13\/68904bf4471c1_result.png","original_filename":"Screenshot 2025-08-04 at 10.14.41 AM.png","file_size":373183,"upload_type":"result","description":"","kills_claimed":3,"rank_claimed":1,"won_match":true,"verified":false}
+[2025-08-04 11:28:13] Exception caught: Insert operation failed - no data returned from API
+[2025-08-04 11:28:13] Exception trace: #0 /Applications/XAMPP/xamppfiles/htdocs/KGX/public/matches/upload.php(206): SupabaseClient->insert('match_screensho...', Array)
+#1 {main}
+[2025-08-04 11:28:29] POST request detected. Starting upload process.
+[2025-08-04 11:28:29] Match ID: 13
+[2025-08-04 11:28:29] User ID: 5
+[2025-08-04 11:28:29] POST data: {"won_match":"yes","kills_claimed":"03","rank_claimed":"1","description":""}
+[2025-08-04 11:28:29] FILES data: {"result_screenshot":{"name":"Screenshot 2025-08-04 at 10.14.41 AM.png","full_path":"Screenshot 2025-08-04 at 10.14.41 AM.png","type":"image\/png","tmp_name":"\/Applications\/XAMPP\/xamppfiles\/temp\/phpVKkxwb","error":0,"size":373183},"winner_screenshot":{"name":"Screenshot 2025-08-04 at 10.01.26 AM.png","full_path":"Screenshot 2025-08-04 at 10.01.26 AM.png","type":"image\/png","tmp_name":"\/Applications\/XAMPP\/xamppfiles\/temp\/phpgQhC8S","error":0,"size":301798}}
+[2025-08-04 11:28:29] Kills claimed: 3
+[2025-08-04 11:28:29] Rank claimed (raw): 1
+[2025-08-04 11:28:29] Rank claimed (processed): 1
+[2025-08-04 11:28:29] Won match: yes
+[2025-08-04 11:28:29] Description: 
+[2025-08-04 11:28:29] Generated filename for result: user_5/match_13/68904c05333d1_result.png
+[2025-08-04 11:28:29] Starting result file upload to Supabase Storage...
+[2025-08-04 11:28:30] Upload result for result: {"Key":"match-screenshots\/user_5\/match_13\/68904c05333d1_result.png","Id":"262d0cbe-1641-4bcb-a999-8627ef1eedd4"}
+[2025-08-04 11:28:30] Generated public URL for result: https://xparbvjsubqptuaupwcd.supabase.co/storage/v1/object/public/match-screenshots/user_5/match_13/68904c05333d1_result.png
+[2025-08-04 11:28:30] Preparing to insert result data: {"match_id":13,"user_id":5,"image_path":"user_5\/match_13\/68904c05333d1_result.png","image_url":"https:\/\/xparbvjsubqptuaupwcd.supabase.co\/storage\/v1\/object\/public\/match-screenshots\/user_5\/match_13\/68904c05333d1_result.png","original_filename":"Screenshot 2025-08-04 at 10.14.41 AM.png","file_size":373183,"upload_type":"result","description":"","kills_claimed":3,"rank_claimed":1,"won_match":true,"verified":false}
+[2025-08-04 11:28:30] Exception caught: Insert operation failed - no data returned from API
+[2025-08-04 11:28:30] Exception trace: #0 /Applications/XAMPP/xamppfiles/htdocs/KGX/public/matches/upload.php(206): SupabaseClient->insert('match_screensho...', Array)
+#1 {main}
+[2025-08-04 11:31:43] POST request detected. Starting upload process.
+[2025-08-04 11:31:43] Match ID: 13
+[2025-08-04 11:31:43] User ID: 5
+[2025-08-04 11:31:43] POST data: {"kills_claimed":"04","rank_claimed":"","description":""}
+[2025-08-04 11:31:43] FILES data: {"result_screenshot":{"name":"Screenshot 2025-08-04 at 10.48.53 AM.png","full_path":"Screenshot 2025-08-04 at 10.48.53 AM.png","type":"image\/png","tmp_name":"\/Applications\/XAMPP\/xamppfiles\/temp\/php1DQS8X","error":0,"size":396145},"winner_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0}}
+[2025-08-04 11:31:43] Kills claimed: 4
+[2025-08-04 11:31:43] Rank claimed (raw): 
+[2025-08-04 11:31:43] Rank claimed (processed): null
+[2025-08-04 11:31:43] Won match: no
+[2025-08-04 11:31:43] Description: 
+[2025-08-04 11:31:43] Generated filename for result: user_5/match_13/68904cc7ccef1_result.png
+[2025-08-04 11:31:43] Starting result file upload to Supabase Storage...
+[2025-08-04 11:31:45] Upload result for result: {"Key":"match-screenshots\/user_5\/match_13\/68904cc7ccef1_result.png","Id":"a9504cb4-bf5d-4c47-870e-53e771918d94"}
+[2025-08-04 11:31:45] Generated public URL for result: https://xparbvjsubqptuaupwcd.supabase.co/storage/v1/object/public/match-screenshots/user_5/match_13/68904cc7ccef1_result.png
+[2025-08-04 11:31:45] Preparing to insert result data: {"match_id":13,"user_id":5,"image_path":"user_5\/match_13\/68904cc7ccef1_result.png","image_url":"https:\/\/xparbvjsubqptuaupwcd.supabase.co\/storage\/v1\/object\/public\/match-screenshots\/user_5\/match_13\/68904cc7ccef1_result.png","original_filename":"Screenshot 2025-08-04 at 10.48.53 AM.png","file_size":396145,"upload_type":"result","description":"","kills_claimed":4,"rank_claimed":null,"won_match":false,"verified":false}
+[2025-08-04 11:31:45] Exception caught: Insert operation failed - no data returned from API
+[2025-08-04 11:31:45] Exception trace: #0 /Applications/XAMPP/xamppfiles/htdocs/KGX/public/matches/upload.php(206): SupabaseClient->insert('match_screensho...', Array)
+#1 {main}
+[2025-08-04 11:32:17] POST request detected. Starting upload process.
+[2025-08-04 11:32:17] Match ID: 13
+[2025-08-04 11:32:17] User ID: 5
+[2025-08-04 11:32:17] POST data: {"kills_claimed":"04","rank_claimed":"","description":""}
+[2025-08-04 11:32:17] FILES data: {"result_screenshot":{"name":"Screenshot 2025-08-04 at 10.48.53 AM.png","full_path":"Screenshot 2025-08-04 at 10.48.53 AM.png","type":"image\/png","tmp_name":"\/Applications\/XAMPP\/xamppfiles\/temp\/phplvThOh","error":0,"size":396145},"winner_screenshot":{"name":"","full_path":"","type":"","tmp_name":"","error":4,"size":0}}
+[2025-08-04 11:32:17] Kills claimed: 4
+[2025-08-04 11:32:17] Rank claimed (raw): 
+[2025-08-04 11:32:17] Rank claimed (processed): null
+[2025-08-04 11:32:17] Won match: no
+[2025-08-04 11:32:17] Description: 
+[2025-08-04 11:32:17] Generated filename for result: user_5/match_13/68904ce9ae161_result.png
+[2025-08-04 11:32:17] Starting result file upload to Supabase Storage...
+[2025-08-04 11:32:18] Upload result for result: {"Key":"match-screenshots\/user_5\/match_13\/68904ce9ae161_result.png","Id":"b50e3bbb-64cf-4b7c-9ec5-f047f6604a0b"}
+[2025-08-04 11:32:18] Generated public URL for result: https://xparbvjsubqptuaupwcd.supabase.co/storage/v1/object/public/match-screenshots/user_5/match_13/68904ce9ae161_result.png
+[2025-08-04 11:32:18] Preparing to insert result data: {"match_id":13,"user_id":5,"image_path":"user_5\/match_13\/68904ce9ae161_result.png","image_url":"https:\/\/xparbvjsubqptuaupwcd.supabase.co\/storage\/v1\/object\/public\/match-screenshots\/user_5\/match_13\/68904ce9ae161_result.png","original_filename":"Screenshot 2025-08-04 at 10.48.53 AM.png","file_size":396145,"upload_type":"result","description":"","kills_claimed":4,"rank_claimed":null,"won_match":false,"verified":false}
+[2025-08-04 11:32:19] Exception caught: Insert operation failed - no data returned from API
+[2025-08-04 11:32:19] Exception trace: #0 /Applications/XAMPP/xamppfiles/htdocs/KGX/public/matches/upload.php(206): SupabaseClient->insert('match_screensho...', Array)
+#1 {main}
+[2025-08-04 11:52:31] POST request detected. Starting upload process.
+[2025-08-04 11:52:31] Match ID: 13
+[2025-08-04 11:52:31] User ID: 4
+[2025-08-04 11:52:31] POST data: {"won_match":"yes","kills_claimed":"04","rank_claimed":"1","description":""}
+[2025-08-04 11:52:31] FILES data: {"result_screenshot":{"name":"Screenshot 2025-08-04 at 10.14.41 AM.png","full_path":"Screenshot 2025-08-04 at 10.14.41 AM.png","type":"image\/png","tmp_name":"\/Applications\/XAMPP\/xamppfiles\/temp\/phpBHwUkh","error":0,"size":373183}}
+[2025-08-04 11:52:31] Kills claimed: 4
+[2025-08-04 11:52:31] Rank claimed (raw): 1
+[2025-08-04 11:52:31] Rank claimed (processed): 1
+[2025-08-04 11:52:31] Won match: yes
+[2025-08-04 11:52:31] Description: 
+[2025-08-04 11:52:31] Generated filename for result: user_4/match_13/689051a781232_result.png
+[2025-08-04 11:52:31] Starting result file upload to Supabase Storage...
+[2025-08-04 11:52:33] Upload result for result: {"Key":"match-screenshots\/user_4\/match_13\/689051a781232_result.png","Id":"c7117067-22fa-43ff-b956-24d197d1a69f"}
+[2025-08-04 11:52:33] Generated public URL for result: https://xparbvjsubqptuaupwcd.supabase.co/storage/v1/object/public/match-screenshots/user_4/match_13/689051a781232_result.png
+[2025-08-04 11:52:33] Preparing to insert result data: {"match_id":13,"user_id":4,"image_path":"user_4\/match_13\/689051a781232_result.png","image_url":"https:\/\/xparbvjsubqptuaupwcd.supabase.co\/storage\/v1\/object\/public\/match-screenshots\/user_4\/match_13\/689051a781232_result.png","original_filename":"Screenshot 2025-08-04 at 10.14.41 AM.png","file_size":373183,"upload_type":"result","description":"","kills_claimed":4,"rank_claimed":1,"won_match":true,"verified":false}
+[2025-08-04 11:52:34] Insert result for result: [{"id":17,"match_id":13,"user_id":4,"image_path":"user_4\/match_13\/689051a781232_result.png","image_url":"https:\/\/xparbvjsubqptuaupwcd.supabase.co\/storage\/v1\/object\/public\/match-screenshots\/user_4\/match_13\/689051a781232_result.png","original_filename":"Screenshot 2025-08-04 at 10.14.41 AM.png","file_size":373183,"upload_type":"result","description":"","verified":false,"verified_by":null,"verified_at":null,"kills_claimed":4,"rank_claimed":1,"admin_notes":null,"uploaded_at":"2025-08-04T06:22:33.998651+00:00","won_match":true}]
+[2025-08-04 11:52:34] Successfully processed result screenshot: Screenshot 2025-08-04 at 10.14.41 AM.png

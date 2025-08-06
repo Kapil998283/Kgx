@@ -1,0 +1,11 @@
+# Deny all access to database files
+Order Deny,Allow
+Deny from all
+
+<Files "*.sql">
+    Deny from all
+</Files>
+
+<Files "*.db">
+    Deny from all
+</Files>

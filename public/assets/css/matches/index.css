@@ -1,0 +1,500 @@
+body {
+  background: var(--raisin-black-1);
+}
+
+.matches {
+  max-width: 1200px;
+  margin: 120px auto 60px;
+  padding: 0 20px;
+ 
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 35px;
+}
+
+.section-title {
+    color: var(--platinum);
+    font-size: 2.2em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.my-matches-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: var(--orange);
+    color: var(--raisin-black-1);
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.my-matches-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(140, 255, 128, 0.2);
+}
+
+.my-matches-link i {
+    font-size: 1.2em;
+}
+
+/* Games Filter */
+.games-filter {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 35px;
+    flex-wrap: wrap;
+}
+
+.game-filter-btn {
+    padding: 12px 24px;
+    border-radius: 12px;
+    background: var(--raisin-black-3);
+    color: var(--light-gray);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 1px solid var(--onyx);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.game-filter-btn i {
+    font-size: 1.2em;
+}
+
+.game-filter-btn.active {
+    background: var(--orange);
+    color: var(--raisin-black-1);
+    border-color: transparent;
+}
+
+.game-filter-btn:hover:not(.active) {
+    background: var(--raisin-black-2);
+    transform: translateY(-2px);
+}
+
+/* Matches Grid */
+.matches-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.match-card {
+    background: var(--raisin-black-3);
+    border-radius: 15px;
+    overflow: hidden;
+    border: 1px solid var(--onyx);
+    transition: all 0.3s ease;
+}
+
+.match-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+.match-header {
+    padding: 20px;
+    border-bottom: 1px solid var(--onyx);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.game-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.game-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.game-name {
+    color: var(--platinum);
+    font-size: 1.2em;
+    font-weight: 600;
+    margin: 0;
+}
+
+.tournament-name {
+    color: var(--orange);
+    font-size: 0.9em;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.match-type {
+    padding: 6px 12px;
+    background: var(--raisin-black-1);
+    border-radius: 20px;
+    font-size: 0.85em;
+    color: var(--light-gray);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.match-info {
+    padding: 20px;
+    background: var(--raisin-black-2);
+    border-radius: 12px;
+    margin: 20px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.info-item {
+    color: var(--light-gray);
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--raisin-black-3);
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid var(--onyx);
+}
+
+.info-item i {
+    color: var(--orange);
+    font-size: 1.1em;
+}
+
+.entry-fee {
+    color: var(--light-gray);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9em;
+    background: var(--raisin-black-3);
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid var(--onyx);
+    margin-bottom: 15px;
+}
+
+.entry-fee i {
+    color: var(--orange);
+    font-size: 1.1em;
+}
+
+.match-status {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: 600;
+    background: var(--raisin-black-3);
+    border: 1px solid var(--onyx);
+    min-width: 100px;
+    text-align: center;
+}
+
+.status-badge i {
+    font-size: 0.8em;
+}
+
+/* Upcoming - Light Yellow */
+.status-badge.status-upcoming {
+    background: linear-gradient(135deg, #FFF3CD, #FCE4A6);
+    color: #8B4513;
+    border: 1px solid #F5C542;
+    box-shadow: 0 2px 8px rgba(252, 228, 166, 0.3);
+}
+
+/* In Progress/Started - Green */
+.status-badge.status-started,
+.status-badge.status-in {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: #ffffff;
+    border: 1px solid #1e7e34;
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+.status-badge.status-progress {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: #ffffff;
+    border: 1px solid #1e7e34;
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+/* Completed - Grey */
+.status-badge.status-completed {
+    background: linear-gradient(135deg, #6c757d, #5a6268);
+    color: #ffffff;
+    border: 1px solid #545b62;
+    box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
+}
+
+/* Match Actions Container */
+.match-actions {
+    padding: 20px;
+    border-top: 1px solid var(--onyx);
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Base Match Button Styles */
+.match-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 80px;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.match-btn i {
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.match-btn span {
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+/* Login Button - Primary Orange */
+.btn-login {
+    background: #FF6B35;
+    color: #ffffff;
+    box-shadow: 0 2px 4px rgba(255, 107, 53, 0.2);
+}
+
+.btn-login:hover {
+    background: #E55A2B;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(255, 107, 53, 0.3);
+    color: #ffffff;
+}
+
+/* Join Button - Success Green */
+.btn-join {
+    background: #28A745;
+    color: #ffffff;
+    box-shadow: 0 2px 4px rgba(40, 167, 69, 0.2);
+}
+
+.btn-join:hover {
+    background: #218838;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+    color: #ffffff;
+}
+
+/* Players Button - Info Blue */
+.btn-players {
+    background: #007BFF;
+    color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
+}
+
+.btn-players:hover {
+    background: #0056B3;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+    color: #ffffff;
+}
+
+/* Winner Button - Warning Gold */
+.btn-winner {
+    background: #FFC107;
+    color: #212529;
+    box-shadow: 0 2px 4px rgba(255, 193, 7, 0.2);
+}
+
+.btn-winner:hover {
+    background: #E0A800;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+    color: #212529;
+}
+
+/* Upload Button - Teal */
+.btn-upload {
+    background: #20C997;
+    color: #ffffff;
+    box-shadow: 0 2px 4px rgba(32, 201, 151, 0.2);
+}
+
+.btn-upload:hover {
+    background: #1BA085;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(32, 201, 151, 0.3);
+    color: #ffffff;
+}
+
+/* Status Buttons (Disabled States) */
+.btn-joined,
+.btn-complete,
+.btn-disabled {
+    background: #6C757D;
+    color: #ffffff;
+    opacity: 0.7;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.btn-joined:hover,
+.btn-complete:hover,
+.btn-disabled:hover {
+    transform: none;
+    box-shadow: none;
+    background: #6C757D;
+    color: #ffffff;
+}
+
+/* Active/Focus States */
+.match-btn:active {
+    transform: translateY(0);
+}
+
+.match-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.25);
+}
+
+.no-matches {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--raisin-black-3);
+    border-radius: 15px;
+    border: 1px solid var(--onyx);
+}
+
+.no-matches i {
+    font-size: 48px;
+    color: var(--orange);
+    margin-bottom: 20px;
+}
+
+.no-matches p {
+    color: var(--light-gray);
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+    .matches {
+        margin: 100px auto 40px;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+
+    .section-title {
+        font-size: 1.8em;
+    }
+
+    .games-filter {
+        gap: 10px;
+    }
+
+    .game-filter-btn {
+        padding: 10px 20px;
+        font-size: 0.9em;
+    }
+
+    .matches-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .match-header {
+        flex-direction: row;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .match-type {
+        align-self: center;
+    }
+
+    .match-info {
+        margin: 15px;
+        padding: 15px;
+    }
+
+    .info-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .info-item {
+        padding: 10px;
+        font-size: 0.85em;
+    }
+
+    .entry-fee {
+        padding: 10px;
+        font-size: 0.85em;
+    }
+
+    .status-badge {
+        padding: 6px 14px;
+        font-size: 0.8em;
+    }
+
+    .match-actions {
+        flex-direction: column;
+        gap: 10px;
+        padding: 15px;
+    }
+
+    .match-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 14px 20px;
+        font-size: 0.95rem;
+    }
+}
+

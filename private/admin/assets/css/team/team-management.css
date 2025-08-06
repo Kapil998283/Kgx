@@ -1,0 +1,504 @@
+/* Team Management Gamer Theme */
+@import url('../root.css');
+
+/* Dark Gaming Theme Colors */
+:root {
+    --gamer-bg: #0a0e1a;
+    --gamer-surface: #1a1f2e;
+    --gamer-card: #252a3a;
+    --gamer-border: #2d3748;
+    --gamer-accent: #00d4ff;
+    --gamer-accent-hover: #00b8e6;
+    --gamer-success: #10b981;
+    --gamer-warning: #f59e0b;
+    --gamer-danger: #ef4444;
+    --gamer-text: #e2e8f0;
+    --gamer-text-muted: #94a3b8;
+    --gamer-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gamer-glow: 0 0 20px rgba(0, 212, 255, 0.3);
+}
+
+/* Page Layout */
+.team-management-container {
+    background: var(--gamer-bg);
+    min-height: 100vh;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--gamer-text);
+}
+
+/* Main Content */
+.team-main-content {
+    width: 100%;
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Page Header */
+.team-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 0;
+    border-bottom: 2px solid var(--gamer-border);
+    margin-bottom: 2rem;
+}
+
+.back-to-dashboard {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    background-color: var(--gamer-accent);
+    color: #fff;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+
+.back-to-dashboard:hover {
+    background-color: var(--gamer-accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
+}
+
+.team-page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--gamer-text);
+    margin: 0;
+    text-shadow: 0 0 10px var(--gamer-accent);
+    position: relative;
+}
+
+.team-page-title::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--gamer-gradient);
+    border-radius: 2px;
+}
+
+.team-toolbar {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Search Section */
+.team-search-card {
+    background: var(--gamer-card);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--gamer-border);
+}
+
+.team-search-form {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.team-search-input-group {
+    display: flex;
+    flex: 1;
+    min-width: 300px;
+}
+
+.team-search-input {
+    flex: 1;
+    height: 48px;
+    padding: 0 1rem;
+    border: 2px solid var(--gamer-border);
+    border-radius: 8px 0 0 8px;
+    background-color: var(--gamer-surface);
+    color: var(--gamer-text);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.team-search-input:focus {
+    outline: none;
+    border-color: var(--gamer-accent);
+    box-shadow: var(--gamer-glow);
+}
+
+.team-search-input::placeholder {
+    color: var(--gamer-text-muted);
+}
+
+.team-search-btn {
+    height: 48px;
+    padding: 0 1.5rem;
+    background: var(--gamer-gradient);
+    color: white;
+    border: none;
+    border-radius: 0 8px 8px 0;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+}
+
+.team-search-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.team-clear-btn {
+    height: 48px;
+    padding: 0 1rem;
+    background-color: var(--gamer-danger);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    text-transform: uppercase;
+}
+
+.team-clear-btn:hover {
+    background-color: #dc2626;
+    transform: translateY(-2px);
+    color: white;
+}
+
+/* Alert Messages */
+.team-alert {
+    padding: var(--spacing-4) var(--spacing-6);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--spacing-6);
+    border: 1px solid;
+    font-weight: var(--font-weight-medium);
+}
+
+.team-alert-success {
+    background-color: var(--primary-green-50);
+    border-color: var(--primary-green-200);
+    color: var(--primary-green-800);
+}
+
+.team-alert-error {
+    background-color: #fef2f2;
+    border-color: #fecaca;
+    color: var(--error-dark);
+}
+
+/* Main Table Card */
+.team-table-card {
+    background: var(--gamer-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);
+    border: 1px solid var(--gamer-border);
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
+
+.team-table-container {
+    overflow-x: auto;
+    margin: 0;
+    padding: 0;
+}
+
+/* Table Styles */
+.team-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    background: transparent;
+}
+
+.team-table thead {
+    background: var(--gamer-card);
+}
+
+.team-table th {
+    background: var(--gamer-card);
+    color: var(--gamer-text);
+    padding: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--gamer-border);
+    white-space: nowrap;
+}
+
+.team-table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid rgba(45, 55, 72, 0.3);
+    color: var(--gamer-text);
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.team-table tbody tr {
+    background: transparent;
+    transition: all 0.2s ease;
+}
+
+.team-table tbody tr:hover {
+    background-color: rgba(0, 212, 255, 0.05);
+}
+
+.team-table tbody tr:nth-child(even) {
+    background-color: rgba(37, 42, 58, 0.3);
+}
+
+.team-table tbody tr:nth-child(even):hover {
+    background-color: rgba(0, 212, 255, 0.08);
+}
+
+.team-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Team Logo */
+.team-logo {
+    width: 50px;
+    height: 50px;
+    border-radius: var(--radius-full);
+    object-fit: cover;
+    border: 2px solid var(--border-light);
+    transition: var(--transition-all);
+}
+
+.team-logo:hover {
+    transform: scale(1.1);
+    border-color: var(--primary-purple);
+}
+
+/* Team Banner */
+.team-banner {
+    width: 100px;
+    height: 50px;
+    border-radius: var(--radius-lg);
+    object-fit: cover;
+    border: 2px solid var(--border-light);
+    transition: var(--transition-all);
+}
+
+.team-banner:hover {
+    transform: scale(1.05);
+    border-color: var(--primary-green);
+}
+
+/* Status Badges */
+.team-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--spacing-1) var(--spacing-3);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.team-badge-active {
+    background-color: var(--primary-green-100);
+    color: var(--primary-green-800);
+    border: 1px solid var(--primary-green-200);
+}
+
+.team-badge-inactive {
+    background-color: #fef2f2;
+    color: var(--error-dark);
+    border: 1px solid #fecaca;
+}
+
+.team-badge-score {
+    background: var(--admin-gradient-primary);
+    color: var(--white);
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-2) var(--spacing-4);
+}
+
+/* Action Buttons */
+.team-action-group {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.team-btn {
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    min-width: 60px;
+    text-align: center;
+}
+
+.team-btn-view {
+    background-color: var(--gamer-accent);
+    color: #fff;
+}
+.team-btn-view:hover {
+    background-color: var(--gamer-accent-hover);
+    transform: translateY(-1px);
+    color: #fff;
+}
+
+.team-btn-activate {
+    background-color: var(--gamer-success);
+    color: #fff;
+}
+.team-btn-activate:hover {
+    background-color: #059669;
+    transform: translateY(-1px);
+    color: #fff;
+}
+
+.team-btn-deactivate {
+    background-color: var(--gamer-warning);
+    color: #fff;
+}
+.team-btn-deactivate:hover {
+    background-color: #d97706;
+    transform: translateY(-1px);
+    color: #fff;
+}
+
+.team-btn-delete {
+    background-color: var(--gamer-danger);
+    color: #fff;
+}
+.team-btn-delete:hover {
+    background-color: #dc2626;
+    transform: translateY(-1px);
+    color: #fff;
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .team-sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    .team-main-content {
+        margin-left: 0;
+        padding: var(--spacing-4);
+    }
+
+    .team-page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-4);
+    }
+
+    .team-search-form {
+        flex-direction: column;
+    }
+
+    .team-search-input-group {
+        min-width: 100%;
+    }
+
+    .team-table-container {
+        overflow-x: scroll;
+    }
+
+    .team-table {
+        min-width: 800px;
+    }
+
+    .team-action-group {
+        flex-direction: column;
+        gap: var(--spacing-1);
+    }
+}
+
+@media (max-width: 480px) {
+    .team-page-title {
+        font-size: var(--font-size-2xl);
+    }
+
+    .team-main-content {
+        padding: var(--spacing-2);
+    }
+
+    .team-search-card,
+    .team-table-card {
+        padding: var(--spacing-4);
+    }
+}
+
+/* Loading States */
+.team-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--spacing-16);
+}
+
+.team-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--primary-purple-200);
+    border-top: 4px solid var(--primary-purple);
+    border-radius: var(--radius-full);
+    animation: team-spin 1s linear infinite;
+}
+
+@keyframes team-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Custom Scrollbar */
+.team-table-container::-webkit-scrollbar {
+    height: 6px;
+}
+
+.team-table-container::-webkit-scrollbar-track {
+    background: var(--gamer-surface);
+    border-radius: 3px;
+}
+
+.team-table-container::-webkit-scrollbar-thumb {
+    background: var(--gamer-accent);
+    border-radius: 3px;
+}
+
+.team-table-container::-webkit-scrollbar-thumb:hover {
+    background: var(--gamer-accent-hover);
+}
+
+/* Prevent horizontal scroll issues */
+@media (max-width: 1200px) {
+    .team-table th,
+    .team-table td {
+        padding: 0.5rem;
+        font-size: 0.8rem;
+    }
+    
+    .team-action-group {
+        flex-direction: column;
+        gap: 0.2rem;
+    }
+    
+    .team-btn {
+        font-size: 0.7rem;
+        padding: 0.3rem 0.5rem;
+        min-width: 50px;
+    }
+}

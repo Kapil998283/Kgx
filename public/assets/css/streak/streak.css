@@ -1,0 +1,661 @@
+/* Streak Info Card */
+.streak-info-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.streak-stats {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.stat-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-align: center;
+    min-width: 200px;
+}
+
+.stat-number {
+    font-size: 32px;
+    font-weight: 700;
+    color: #19fb00;
+    margin-bottom: 10px;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.milestone-progress {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.milestone-progress h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.progress-bar {
+    background: #eee;
+    height: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    margin: 15px 0;
+}
+
+.progress-bar .progress {
+    background: #19fb00;
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    font-size: 14px;
+    color: #666;
+}
+
+.milestone-reward {
+    font-size: 16px;
+    color: #333;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+/* Tasks Container */
+.streak-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.tasks-container {
+    margin-top: 30px;
+}
+
+.tasks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.task-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+    margin-bottom: 20px;
+}
+
+.task-card:hover {
+    transform: translateY(-2px);
+}
+
+.task-card h3 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.task-card p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.task-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.points {
+    font-size: 16px;
+    font-weight: 600;
+    color: #19fb00;
+}
+
+.complete-task-btn {
+    background: #19fb00;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.complete-task-btn:hover {
+    background: #16e100;
+    transform: translateY(-2px);
+}
+
+.complete-task-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.completed {
+    background: #f8f8f8;
+}
+
+.completed-label {
+    color: #4CAF50;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Headers */
+h2, h3 {
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+h2 {
+    font-size: 24px;
+}
+
+h3 {
+    font-size: 20px;
+}
+
+/* History Table Styles */
+.history-section {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin: 40px 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.history-table {
+    width: 100%;
+    min-width: 600px;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: white;
+    border-radius: 10px;
+}
+
+.history-table th {
+    background: #f8f9fa;
+    padding: 20px;
+    font-weight: 600;
+    color: #333;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 1px;
+    border-bottom: 2px solid #eee;
+}
+
+.history-table td {
+    padding: 20px;
+    font-size: 15px;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.history-table tr:last-child td {
+    border-bottom: none;
+}
+
+.history-table .active-day {
+    background-color: #f8fff8;
+}
+
+.history-table .inactive-day {
+    background-color: #fff;
+    color: #666;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.status-badge.success {
+    background-color: #e8fff0;
+    color: #19fb00;
+}
+
+.status-badge.inactive {
+    background-color: #f8f9fa;
+    color: #666;
+}
+
+.status-badge ion-icon {
+    font-size: 18px;
+}
+
+/* Achievement Styles */
+.achievements-section {
+    margin: 40px 0;
+    padding: 30px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.no-achievements {
+    text-align: center;
+    padding: 50px 20px;
+    background: linear-gradient(145deg, #ffffff, #f8f9fa);
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.no-achievements .large-icon {
+    font-size: 80px;
+    color: #19fb00;
+    margin-bottom: 30px;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+.no-achievements p {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 30px;
+    font-weight: 500;
+}
+
+.upcoming-milestones {
+    margin-top: 40px;
+    text-align: left;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.upcoming-milestones h3 {
+    color: #333;
+    margin-bottom: 25px;
+    font-size: 24px;
+    text-align: center;
+    position: relative;
+}
+
+.upcoming-milestones h3:after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: #19fb00;
+    margin: 15px auto 0;
+    border-radius: 2px;
+}
+
+.upcoming-milestones ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.upcoming-milestones li {
+    padding: 25px;
+    background: white;
+    border-radius: 12px;
+    color: #333;
+    font-size: 16px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    border: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.upcoming-milestones li:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0,0,0,0.1);
+    border-color: #19fb00;
+}
+
+.milestone-name {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.milestone-points {
+    color: #19fb00;
+    font-weight: 600;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.milestone-reward {
+    color: #666;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.achievement-card {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    border: 1px solid #eee;
+}
+
+.achievement-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0,0,0,0.1);
+    border-color: #19fb00;
+}
+
+.achievement-icon {
+    font-size: 40px;
+    color: #19fb00;
+    background: #e8fff0;
+    padding: 20px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.achievement-card:hover .achievement-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.achievement-info {
+    flex: 1;
+}
+
+.achievement-name {
+    font-size: 22px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.achievement-description {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.achievement-date {
+    font-size: 14px;
+    color: #999;
+}
+
+.achievement-points {
+    font-size: 20px;
+    font-weight: 600;
+    color: #19fb00;
+    padding: 12px 24px;
+    background: #e8fff0;
+    border-radius: 25px;
+    white-space: nowrap;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    text-align: center;
+    max-width: 450px;
+    width: 90%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h2 {
+    color: #333;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+}
+
+.conversion-info {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-row span:first-child {
+    color: #666;
+}
+
+.info-row span:last-child {
+    font-weight: 600;
+    color: #333;
+}
+
+.coin-input {
+    margin: 1.5rem 0;
+    text-align: left;
+}
+
+.coin-input label {
+    display: block;
+    margin-bottom: 1rem;
+    color: #333;
+    font-weight: 500;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1rem;
+}
+
+.coin-btn {
+    background: #19fb00;
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.coin-btn:hover {
+    background: #16e100;
+    transform: translateY(-2px);
+}
+
+.coin-input input {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+.coin-input input:focus {
+    outline: none;
+    border-color: #19fb00;
+}
+
+.points-needed {
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.cancel-btn, .confirm-btn {
+    padding: 0.8rem 2rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.cancel-btn {
+    background: #f1f3f5;
+    color: #495057;
+}
+
+.confirm-btn {
+    background: #19fb00;
+    color: white;
+}
+
+.cancel-btn:hover, .confirm-btn:hover {
+    transform: translateY(-2px);
+}
+
+.cancel-btn:hover {
+    background: #e9ecef;
+}
+
+.confirm-btn:hover {
+    background: #16e100;
+}
+
+/* Convert Button in Stats */
+.convert-btn {
+    background: #19fb00;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 1rem auto 0;
+    transition: all 0.3s ease;
+}
+
+.convert-btn:hover {
+    background: #16e100;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .history-section {
+        padding: 10px;
+        margin: 20px 0;
+    }
+
+    .history-table th,
+    .history-table td {
+        padding: 12px 10px;
+        font-size: 14px;
+    }
+
+    .status-badge {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+
+    .status-badge ion-icon {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .streak-stats {
+        gap: 10px;
+    }
+
+    .stat-card {
+        min-width: 140px;
+        padding: 15px;
+    }
+
+    .stat-number {
+        font-size: 24px;
+    }
+
+    .stat-label {
+        font-size: 12px;
+    }
+
+    .tasks-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .task-card {
+        padding: 15px;
+    }
+} 

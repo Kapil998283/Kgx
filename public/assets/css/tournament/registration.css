@@ -1,0 +1,284 @@
+/*-----------------------------------*\
+  #TOURNAMENT REGISTRATION - STANDALONE
+\*-----------------------------------*/
+
+/* --- Color Palette --- */
+:root {
+  --raisin-black-1: hsl(240, 14%, 7%);
+  --raisin-black-2: hsl(240, 12%, 12%);
+  --raisin-black-3: hsl(240, 10%, 18%);
+  --light-gray: hsl(0, 0%, 90%);
+  --xiketic: hsl(140, 100%, 20%);
+  --orange: hsla(140, 100%, 50%, 0.985);
+  --white: hsl(0, 0%, 100%);
+  --status-red: #ff4d1c;
+  --status-red-bg: rgba(255, 77, 28, 0.1);
+}
+
+.registration-section {
+  background-color: var(--raisin-black-1);
+  padding: 100px 15px 80px;
+  font-family: 'Poppins', sans-serif;
+  min-height: 80vh;
+}
+
+.registration-section .card {
+  background: var(--raisin-black-2);
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid var(--raisin-black-3);
+}
+
+.registration-section .card-header {
+  background: var(--raisin-black-2);
+  padding: 25px 30px;
+  border-bottom: 1px solid var(--raisin-black-3);
+  text-align: center;
+}
+
+.registration-section .card-header h2 {
+  font-family: 'Oswald', sans-serif;
+  font-size: 2.2rem;
+  color: var(--white);
+  font-weight: 600;
+  margin: 0;
+}
+
+.registration-section .card-body {
+  padding: 40px;
+}
+
+/* --- Registration Form Styles --- */
+.tournament-info {
+  padding: 20px;
+  border-radius: 16px;
+  margin-bottom: 30px;
+  border: 1px solid var(--raisin-black-3);
+  text-align: center;
+}
+.tournament-info h4 {
+  color: var(--white);
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+.tournament-info .text-muted {
+  color: var(--light-gray) !important;
+  margin-bottom: 20px;
+}
+.tournament-info .details {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    align-items: center;
+}
+.tournament-info .entry-fee,
+.tournament-info .prize-pool {
+  color: var(--light-gray);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tournament-info ion-icon {
+  color: var(--orange);
+  font-size: 1.8em;
+}
+
+.form-label {
+  font-weight: 500;
+  color: var(--white);
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.team-info {
+  padding: 15px 20px;
+  background: var(--raisin-black-3);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.team-info h4 {
+  color: var(--white);
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.team-members-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 15px;
+}
+.member-card {
+  position: relative;
+  background: var(--raisin-black-3);
+  border-radius: 16px;
+  padding: 15px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border: 2px solid transparent;
+}
+.member-card:not(.unavailable):hover {
+  transform: translateY(-4px);
+  background: var(--raisin-black-2);
+}
+.member-card.selected {
+  border-color: var(--orange);
+  box-shadow: 0 0 20px rgba(0, 255, 132, 0.3);
+  transform: translateY(-2px);
+}
+.member-card.unavailable {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(100%);
+}
+.member-checkbox {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  accent-color: var(--orange);
+}
+.member-avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  margin: 5px auto 10px;
+  object-fit: cover;
+  border: 3px solid var(--raisin-black-2);
+  transition: border-color 0.2s ease-in-out;
+}
+.member-card.selected .member-avatar {
+  border-color: var(--orange);
+}
+.member-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--white);
+}
+
+.confirmation-message .user-info strong {
+    font-size: 1.5rem;
+    color: var(--orange);
+}
+
+/* --- Error State Styles --- */
+.registration-error-container {
+    background: var(--status-red-bg);
+    border: 1px solid var(--status-red);
+}
+.error-icon {
+    font-size: 4rem;
+    color: var(--status-red);
+    margin-bottom: 1rem;
+}
+.error-heading {
+    font-family: 'Oswald', sans-serif;
+    color: var(--white);
+    font-size: 2rem;
+    font-weight: 600;
+}
+.error-message {
+    color: var(--light-gray);
+    font-size: 1.1rem;
+    max-width: 500px;
+    margin: 0 auto 1.5rem;
+}
+.guidance {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1.5rem;
+    border-radius: 16px;
+}
+.guidance-heading {
+    font-family: 'Oswald', sans-serif;
+    color: var(--white);
+    font-weight: 500;
+}
+.guidance-list {
+    color: var(--light-gray);
+    padding-left: 1.2rem;
+    margin-bottom: 0;
+}
+.guidance-list li {
+    margin-bottom: 0.5rem;
+}
+
+
+/* --- Standalone Buttons --- */
+.btn {
+  display: inline-block;
+  font-family: 'Oswald', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  border: none;
+  text-align: center;
+}
+
+.btn-primary {
+  --polygon-1: polygon(70% 0, 100% 30%, 100% 100%, 30% 100%, 0 70%, 0 0);
+  background: var(--orange);
+  color: var(--white);
+  padding: 15px 30px;
+  clip-path: var(--polygon-1);
+}
+
+.btn-primary:is(:hover, :focus) {
+  background: var(--white);
+  color: var(--orange);
+}
+
+.btn-secondary {
+  background: var(--xiketic);
+  color: var(--white);
+  padding: 15px 30px;
+  border-radius: 6px;
+}
+
+.btn-secondary:is(:hover, :focus) {
+  background: var(--raisin-black-3);
+  color: var(--orange);
+}
+
+.error-message a {
+    --polygon-1: polygon(70% 0, 100% 30%, 100% 100%, 30% 100%, 0 70%, 0 0);
+    display: inline-block;
+    background: var(--orange);
+    color: var(--white);
+    padding: 12px 25px;
+    clip-path: var(--polygon-1);
+    font-family: 'Oswald', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+    margin-top: 1rem;
+    transition: all 0.15s ease-in-out;
+}
+
+.error-message a:is(:hover, :focus) {
+    background: var(--white);
+    color: var(--orange);
+}
+
+@media (max-width: 576px) {
+  .registration-section .card-body {
+    padding: 25px;
+  }
+  .d-grid {
+    gap: 1rem !important;
+  }
+  .btn {
+    width: 100%;
+  }
+}
