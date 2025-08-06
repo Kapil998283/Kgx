@@ -1,32 +1,114 @@
 <?php
-// CRITICAL: Suppress ALL error output to prevent corrupting JSON response
-ini_set('display_errors', 0);
-ini_set('display_startup_errors', 0);
-ini_set('log_errors', 1);
-error_reporting(0);
-
-// Set error handler to suppress all output
-set_error_handler(function($errno, $errstr, $errfile, $errline) {
-    error_log("Fake User Generator Error: $errstr in $errfile on line $errline");
-    return true; // Don't execute PHP internal error handler
-});
-
-// Define admin secure access
-define('ADMIN_SECURE_ACCESS', true);
-
-// Load admin secure configuration
-require_once dirname(__DIR__, 2) . '/admin_secure_config.php';
-
-// Use the new admin authentication system
-require_once ADMIN_INCLUDES_PATH . 'admin-auth.php';
-
-// Initialize Supabase connection with admin privileges
-$supabase = new SupabaseClient(true);
-
+// Set JSON header first to ensure proper response format
 header('Content-Type: application/json');
 
+// Enable error reporting for debugging but capture errors
+ini_set('display_errors', 0); // Don't display to avoid breaking JSON
+ini_set('log_errors', 1);
+error_reporting(E_ALL);
+
+// Set up error handler to output JSON errors
+set_error_handler(function($severity, $message, $file, $line) {
+    echo json_encode([
+        'success' => false,
+        'error' => "PHP Error: $message in $file on line $line"
+    ]);
+    exit;
+});
+
 try {
-    $count = isset($_GET['count']) ? min(50, max(1, (int)$_GET['count'])) : 30; // Default 30, max 50
+    // Define admin secure access
+    define('ADMIN_SECURE_ACCESS', true);
+    
+    // Load admin secure configuration (go up from testing/ to tournament/ to admin/)
+    $config_path = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'admin_secure_config.php';
+    
+    if (!file_exists($config_path)) {
+        throw new Exception("Admin config file not found at: $config_path");
+    }
+    
+    require_once $config_path;
+    
+    // Use the new admin authentication system
+    if (!defined('ADMIN_INCLUDES_PATH')) {
+        throw new Exception("ADMIN_INCLUDES_PATH not defined. Check admin_secure_config.php");
+    }
+    
+    $auth_path = ADMIN_INCLUDES_PATH . 'admin-auth.php';
+    if (!file_exists($auth_path)) {
+        throw new Exception("Admin auth file not found at: $auth_path");
+    }
+    
+    // Start session before requiring auth
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    
+    require_once $auth_path;
+    
+    // Initialize Supabase connection with service role (admin privileges)
+    if (!class_exists('SupabaseClient')) {
+        throw new Exception("SupabaseClient class not found. Check admin-auth.php");
+    }
+    
+    $supabase = new SupabaseClient(true); // Service role with admin privileges
+    error_log("Supabase connection initialized with service role");
+    
+} catch (Exception $e) {
+    error_log("Initialization failed: " . $e->getMessage());
+    echo json_encode([
+        'success' => false,
+        'error' => 'Initialization failed: ' . $e->getMessage(),
+        'debug_info' => [
+            'config_path' => isset($config_path) ? $config_path : 'not_set',
+            'auth_path' => isset($auth_path) ? $auth_path : 'not_set',
+            'admin_includes_defined' => defined('ADMIN_INCLUDES_PATH')
+        ]
+    ]);
+    exit;
+}
+
+try {
+    // Debug mode: check if we should run in debug mode first
+    $debug = isset($_GET['debug']) && $_GET['debug'] === '1';
+    
+    if ($debug) {
+        // Test minimal user creation for debugging
+        try {
+            $test_username = 'TestUser' . rand(1000, 9999);
+            $test_email = strtolower($test_username) . '@testuser.com';
+            
+            // Try the most minimal user creation possible
+            $minimal_user = [
+                'username' => $test_username,
+                'email' => $test_email,
+                'password' => password_hash('test123', PASSWORD_DEFAULT)  // Schema uses 'password'
+            ];
+            
+            error_log("Debug mode: Testing minimal user creation");
+            $result = $supabase->insert('users', $minimal_user);
+            
+            echo json_encode([
+                'success' => $result ? true : false,
+                'debug_mode' => true,
+                'test_user' => $minimal_user,
+                'insert_result' => $result,
+                'message' => $result ? 'Debug test user created successfully' : 'Debug test user creation failed'
+            ]);
+            exit;
+            
+        } catch (Exception $e) {
+            echo json_encode([
+                'success' => false,
+                'debug_mode' => true,
+                'error' => $e->getMessage(),
+                'message' => 'Debug mode failed'
+            ]);
+            exit;
+        }
+    }
+    
+    $count = isset($_GET['count']) ? min(50, max(1, (int)$_GET['count'])) : 5; // Allow up to 50 users
     $game = isset($_GET['game']) ? $_GET['game'] : 'BGMI';
     
     $created_users = [];
@@ -38,51 +120,69 @@ try {
         $password_hash = password_hash('testpass123', PASSWORD_DEFAULT);
         
         try {
-            // Create user record
+            // Create user data matching exact database schema
             $user_data = [
                 'username' => $username,
                 'email' => $email,
-                'password_hash' => $password_hash,
+                'password' => $password_hash,  // Schema uses 'password', not 'password_hash'
                 'full_name' => generateFullName($username),
-                'phone' => generatePhone(),
                 'role' => 'user',
-                'is_active' => true,
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s'),
-                'email_verified' => true,
-                'phone_verified' => true
+                'ticket_balance' => 1000,  // Give them initial balance
+                'phone' => generatePhone()  // Phone field exists in schema
             ];
+            // Note: No created_at, updated_at - these are auto-generated by PostgreSQL
             
+            error_log("Attempting to create user: $username with data: " . json_encode($user_data));
             $result = $supabase->insert('users', $user_data);
+            error_log("User insert result: " . ($result ? "success" : "failed"));
             
             if ($result) {
+                // Wait a moment for the insert to complete
+                usleep(100000); // 0.1 seconds
+                
                 // Get the created user ID
                 $user_record = $supabase->select('users', 'id', ['email' => $email], null, 1);
                 if (!empty($user_record)) {
                     $user_id = $user_record[0]['id'];
+                    error_log("Created user ID: $user_id");
                     
-                    // Create user game profile for BGMI
-                    $game_data = [
-                        'user_id' => $user_id,
-                        'game_name' => $game,
-                        'game_username' => generateGameUsername($username),
-                        'game_uid' => generateGameUID(),
-                        'game_level' => rand(20, 99),
-                        'is_primary' => 1
-                    ];
-                    $supabase->insert('user_games', $game_data);
+                    try {
+                        // Create user game profile
+                        $game_data = [
+                            'user_id' => $user_id,
+                            'game_name' => $game,
+                            'game_username' => generateGameUsername($username),
+                            'game_uid' => generateGameUID(),
+                            'game_level' => rand(20, 99),
+                            'is_primary' => true
+                        ];
+                        $supabase->insert('user_games', $game_data);
+                        error_log("Created game profile for user $user_id");
+                    } catch (Exception $e) {
+                        error_log("Failed to create game profile: " . $e->getMessage());
+                    }
                     
-                    // Give user 1000 tickets
-                    $supabase->insert('user_tickets', [
-                        'user_id' => $user_id,
-                        'tickets' => 1000
-                    ]);
+                    try {
+                        // Give user 1000 tickets
+                        $supabase->insert('user_tickets', [
+                            'user_id' => $user_id,
+                            'tickets' => 1000
+                        ]);
+                        error_log("Created tickets for user $user_id");
+                    } catch (Exception $e) {
+                        error_log("Failed to create tickets: " . $e->getMessage());
+                    }
                     
-                    // Give user 1000 coins
-                    $supabase->insert('user_coins', [
-                        'user_id' => $user_id,
-                        'coins' => 1000
-                    ]);
+                    try {
+                        // Give user 1000 coins
+                        $supabase->insert('user_coins', [
+                            'user_id' => $user_id,
+                            'coins' => 1000
+                        ]);
+                        error_log("Created coins for user $user_id");
+                    } catch (Exception $e) {
+                        error_log("Failed to create coins: " . $e->getMessage());
+                    }
                     
                     $created_users[] = [
                         'id' => $user_id,
@@ -92,10 +192,15 @@ try {
                         'game_uid' => $game_data['game_uid'],
                         'game_level' => $game_data['game_level']
                     ];
+                } else {
+                    throw new Exception("User created but could not retrieve ID");
                 }
+            } else {
+                throw new Exception("User insert operation failed");
             }
             
         } catch (Exception $e) {
+            error_log("Failed to create user $username: " . $e->getMessage());
             $failed_users[] = [
                 'username' => $username,
                 'email' => $email,
@@ -106,14 +211,20 @@ try {
     
     echo json_encode([
         'success' => true,
-        'message' => 'Fake users generated successfully',
+        'message' => 'Fake users generation completed',
         'created_count' => count($created_users),
         'failed_count' => count($failed_users),
         'created_users' => $created_users,
-        'failed_users' => $failed_users
+        'failed_users' => $failed_users,
+        'debug_info' => [
+            'supabase_service_role' => true,
+            'total_attempted' => $count,
+            'game_selected' => $game
+        ]
     ]);
     
 } catch (Exception $e) {
+    error_log("Main exception: " . $e->getMessage());
     echo json_encode([
         'success' => false,
         'error' => $e->getMessage()
