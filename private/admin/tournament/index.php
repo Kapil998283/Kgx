@@ -93,16 +93,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             case 'cancel':
                 try {
-$supabase->update('tournaments', [
+                    $supabase->update('tournaments', [
                         'status' => 'cancelled',
                         'phase' => 'finished',
-                        'updated_at' => formatAdminDate(new DateTime())
+                        'updated_at' => date('Y-m-d H:i:s')
                     ], ['id' => $_POST['tournament_id']]);
-
-// Format date for consistent admin display
-function formatAdminDate($datetime) {
-    return $datetime->format('Y-m-d H:i:s');
-}
                     
                     $_SESSION['success'] = "Tournament cancelled successfully!";
                     logAdminAction('cancel_tournament', 'Cancelled tournament ID: ' . $_POST['tournament_id']);
@@ -329,7 +324,7 @@ try {
                                 <th>Game</th>
                                 <th class="prize-column">Prize Pool</th>
                                 <th class="entry-column">Entry Fee</th>
-                                <th class="teams-column"><?php echo ($tournament['mode'] === 'Solo') ? 'Players' : 'Teams'; ?></th>
+                                <th class="teams-column">Teams/Players</th>
                                 <th class="status-column">Status</th>
                                 <th class="actions-column">Actions</th>
                             </tr>
@@ -479,7 +474,7 @@ try {
                                 <input type="number" class="form-control" name="entry_fee" required min="0" value="0">
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label class="form-label" for="add_max_teams">Max <?php echo ($tournament['mode'] === 'Solo') ? 'Players' : 'Teams'; ?></label>
+                                <label class="form-label" for="add_max_teams">Max Teams/Players</label>
                                 <input type="number" class="form-control" name="max_teams" id="add_max_teams" required min="1" value="100">
                             </div>
                         </div>
@@ -614,7 +609,7 @@ try {
                                 <input type="number" class="form-control" name="entry_fee" required min="0">
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label class="form-label" for="edit_max_teams">Max <?php echo ($tournament['mode'] === 'Solo') ? 'Players' : 'Teams'; ?></label>
+                                <label class="form-label" for="edit_max_teams">Max Teams/Players</label>
                                 <input type="number" class="form-control" name="max_teams" id="edit_max_teams" required min="1">
                             </div>
                         </div>
@@ -763,4 +758,3 @@ try {
     <script src="../assets/js/tournament-operations.js"></script>
 </body>
 </html>
-</html> 

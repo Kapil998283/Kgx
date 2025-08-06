@@ -1,4 +1,18 @@
 <?php
+// CRITICAL: Suppress ALL error output to prevent corrupting JSON response
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
+ini_set('log_errors', 1);
+error_reporting(0);
+
+// Set error handler to suppress all output
+set_error_handler(function($errno, $errstr, $errfile, $errline) {
+    error_log("Get Tournament Error: $errstr in $errfile on line $errline");
+    return true; // Don't execute PHP internal error handler
+});
+
+header('Content-Type: application/json');
+
 // Define admin secure access (only if not already defined)
 if (!defined('ADMIN_SECURE_ACCESS')) {
     define('ADMIN_SECURE_ACCESS', true);

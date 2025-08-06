@@ -170,11 +170,11 @@ try {
                 }
             } else {
                 // For team tournaments
-if (!empty($qualified_ids)) {
+                if (!empty($qualified_ids)) {
                     $teams_data = $supabase->select(
                         'teams', 
                         'id, name', 
-['id' => 'in.(' . implode(',', $qualified_ids) . ')']
+                        ['id' => ['in', $qualified_ids]]
                     );
                     
                     if ($teams_data) {
