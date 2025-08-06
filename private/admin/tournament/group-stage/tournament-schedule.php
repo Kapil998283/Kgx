@@ -254,6 +254,16 @@ if ($matches_data) {
     }
 }
 
+// Get available maps for this tournament's game
+$available_maps = [];
+if ($tournament) {
+    $maps_data = $supabase->select('game_maps', '*', [
+        'game_name' => $tournament['game_name'],
+        'is_active' => true
+    ], 'map_display_name.asc');
+    $available_maps = $maps_data ?: [];
+}
+
 // Get selected group details if group_id is specified
 $selected_group = null;
 if ($group_id) {
@@ -517,7 +527,9 @@ include '../../includes/admin-header.php';
                     </div>
 
                     <div class="alert alert-info">
-                        <strong>Placement Points:</strong> Default points will be applied based on your game type (<?php echo $tournament['game_name']; ?>).
+                        <strong>Game:</strong> <?php echo $tournament['game_name']; ?> - 
+                        <strong>Available Maps:</strong> <?php echo count($available_maps); ?> maps available<br>
+                        <strong>Placement Points:</strong> Default points will be applied based on your game type.
                         You can customize them after creating matches if needed.
                     </div>
                 </div>
@@ -549,21 +561,33 @@ function clearFilter() {
     window.location.href = url.toString();
 }
 
+// Available maps data from PHP
+const availableMaps = <?php echo json_encode($available_maps); ?>;
+
 function updateMatchInputs() {
     const count = parseInt(document.getElementById('matchCount').value);
     const container = document.getElementById('matchInputs');
     let html = '<div class="mb-3"><label class="form-label">Match Times and Maps</label></div>';
     
     for (let i = 1; i <= count; i++) {
+        // Build map options
+        let mapOptions = '<option value="">Select Map</option>';
+        availableMaps.forEach(function(map) {
+            const selected = (i === 1 && map.map_name === 'erangel') ? 'selected' : '';
+            mapOptions += `<option value="${map.map_display_name}" ${selected}>${map.map_display_name}</option>`;
+        });
+        
         html += `
             <div class="row mb-2">
                 <div class="col-md-6">
-                    <input type="time" class="form-control" name="match_times[]" 
-                           placeholder="Match ${i} Time" required>
+                    <label class="form-label small">Match ${i} Time</label>
+                    <input type="time" class="form-control" name="match_times[]" required>
                 </div>
                 <div class="col-md-6">
-                    <input type="text" class="form-control" name="maps[]" 
-                           placeholder="Match ${i} Map" value="Erangel">
+                    <label class="form-label small">Match ${i} Map</label>
+                    <select class="form-select" name="maps[]" required>
+                        ${mapOptions}
+                    </select>
                 </div>
             </div>
         `;

@@ -253,6 +253,40 @@ if ($groups_data) {
     }
 }
 
+// Get total registered participants count
+$total_registered = 0;
+$total_players_count = 0;
+
+if ($is_solo) {
+    // Solo tournament: count total approved user registrations
+    $all_registrations = $supabase->select('tournament_registrations', 'user_id', [
+        'tournament_id' => $tournament_id, 
+        'status' => 'approved',
+        'user_id' => ['not.is', null]
+    ]);
+    $total_registered = count($all_registrations ?: []);
+    $total_players_count = $total_registered; // Same for solo
+} else {
+    // Team tournament: count total approved team registrations and their players
+    $all_registrations = $supabase->select('tournament_registrations', 'team_id', [
+        'tournament_id' => $tournament_id, 
+        'status' => 'approved',
+        'team_id' => ['not.is', null]
+    ]);
+    $total_registered = count($all_registrations ?: []);
+    
+    // Count total players in all registered teams
+    if ($all_registrations) {
+        foreach ($all_registrations as $reg) {
+            $team_members = $supabase->select('team_members', 'id', [
+                'team_id' => $reg['team_id'],
+                'status' => 'active'
+            ]);
+            $total_players_count += count($team_members ?: []);
+        }
+    }
+}
+
 // Get available participants for assignment
 $available_participants = [];
 if ($is_solo) {
@@ -349,35 +383,49 @@ include '../../includes/admin-header.php';
 
             <!-- Groups Overview -->
             <div class="row mb-4">
-                <div class="col-md-3">
+                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3">
                     <div class="card text-center">
-                        <div class="card-body">
+                        <div class="card-body py-3">
                             <h5 class="card-title text-primary"><?php echo count($groups); ?></h5>
-                            <p class="card-text">Total Groups</p>
+                            <p class="card-text small">Total Groups</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3">
                     <div class="card text-center">
-                        <div class="card-body">
+                        <div class="card-body py-3">
                             <h5 class="card-title text-success"><?php echo array_sum(array_column($groups, 'participant_count')); ?></h5>
-                            <p class="card-text">Assigned <?php echo $is_solo ? 'Players' : 'Teams'; ?></p>
+                            <p class="card-text small">Assigned <?php echo $is_solo ? 'Players' : 'Teams'; ?></p>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3">
                     <div class="card text-center">
-                        <div class="card-body">
+                        <div class="card-body py-3">
                             <h5 class="card-title text-warning"><?php echo count($available_participants); ?></h5>
-                            <p class="card-text">Available <?php echo $is_solo ? 'Players' : 'Teams'; ?></p>
+                            <p class="card-text small">Available <?php echo $is_solo ? 'Players' : 'Teams'; ?></p>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3">
                     <div class="card text-center">
-                        <div class="card-body">
+                        <div class="card-body py-3">
                             <h5 class="card-title text-info"><?php echo array_sum(array_column($groups, 'matches_count')); ?></h5>
-                            <p class="card-text">Total Matches</p>
+                            <p class="card-text small">Total Matches</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3">
+                    <div class="card text-center">
+                        <div class="card-body py-3">
+                            <?php if ($is_solo): ?>
+                                <h5 class="card-title text-purple"><?php echo $total_registered; ?></h5>
+                                <p class="card-text small">Total Players</p>
+                            <?php else: ?>
+                                <h5 class="card-title text-purple"><?php echo $total_registered; ?></h5>
+                                <p class="card-text small">Total Teams</p>
+                                <small class="text-muted">(<?php echo $total_players_count; ?> players)</small>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -630,8 +678,8 @@ include '../../includes/admin-header.php';
                                     <button type="button" class="btn btn-outline-warning btn-sm" id="resetSelectionBtn">
                                         <i class="bi bi-arrow-clockwise"></i> Reset All
                                     </button>
-                                    <button type="button" class="btn btn-outline-info btn-sm" id="selectAllBtn">
-                                        <i class="bi bi-check-all"></i> Select All Available
+                                    <button type="button" class="btn btn-outline-info btn-sm" id="selectRequiredBtn">
+                                        <i class="bi bi-check2-square"></i> Select Required (<span id="requiredCount">0</span>)
                                     </button>
                                 </div>
                             </div>
@@ -841,6 +889,9 @@ include '../../includes/admin-header.php';
     border-color: #dc3545 !important;
     box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
 }
+.text-purple {
+    color: #6f42c1 !important;
+}
 </style>
 <script>
 let currentGroupData = null;
@@ -860,6 +911,8 @@ function assignParticipants(groupId, groupName) {
     const groupsData = <?php echo json_encode($groups); ?>;
     currentGroupData = groupsData.find(g => g.id == groupId);
     maxParticipants = currentGroupData ? currentGroupData.max_teams : 0;
+    const currentAssigned = currentGroupData ? currentGroupData.participant_count : 0;
+    const requiredCount = Math.max(0, maxParticipants - currentAssigned);
     
     // Set modal title and group info
     document.getElementById('assign_group_id').value = groupId;
@@ -867,6 +920,7 @@ function assignParticipants(groupId, groupName) {
     document.getElementById('selectedGroupName').textContent = groupName;
     document.getElementById('groupCapacity').textContent = maxParticipants;
     document.getElementById('maxLimit').textContent = maxParticipants;
+    document.getElementById('requiredCount').textContent = requiredCount;
     
     // Reset selection
     resetSelection();
@@ -880,7 +934,7 @@ function assignParticipants(groupId, groupName) {
 function initializeParticipantSelection() {
     const checkboxes = document.querySelectorAll('.participant-checkbox');
     const resetBtn = document.getElementById('resetSelectionBtn');
-    const selectAllBtn = document.getElementById('selectAllBtn');
+    const selectRequiredBtn = document.getElementById('selectRequiredBtn');
     
     // Add event listeners to checkboxes
     checkboxes.forEach(checkbox => {
@@ -890,8 +944,8 @@ function initializeParticipantSelection() {
     // Reset button
     resetBtn.addEventListener('click', resetSelection);
     
-    // Select all button  
-    selectAllBtn.addEventListener('click', selectAllAvailable);
+    // Select required button  
+    selectRequiredBtn.addEventListener('click', selectRequired);
     
     // Update initial counts
     updateSelectionDisplay();
@@ -1007,18 +1061,26 @@ function resetSelection() {
     hideSelectionAlert();
 }
 
-function selectAllAvailable() {
+function selectRequired() {
     const availableCheckboxes = document.querySelectorAll('.participant-checkbox');
-    const availableCount = availableCheckboxes.length;
+    const requiredCount = parseInt(document.getElementById('requiredCount').textContent) || 0;
     
-    if (availableCount > maxParticipants) {
-        showSelectionAlert(`Cannot select all ${availableCount} <?php echo $is_solo ? 'players' : 'teams'; ?>. Maximum allowed is ${maxParticipants}.`, 'warning');
+    if (requiredCount === 0) {
+        showSelectionAlert('This group is already full. No more participants can be assigned.', 'info');
         return;
     }
     
-    // Select all available
+    if (availableCheckboxes.length === 0) {
+        showSelectionAlert('No participants available for selection.', 'warning');
+        return;
+    }
+    
+    const actualSelectCount = Math.min(requiredCount, availableCheckboxes.length);
+    
+    // Select the first N available participants
+    let selectedCount = 0;
     availableCheckboxes.forEach(checkbox => {
-        if (!checkbox.checked) {
+        if (selectedCount < actualSelectCount && !checkbox.checked) {
             checkbox.checked = true;
             const participantItem = checkbox.closest('.participant-item');
             const participantId = participantItem.dataset.participantId;
@@ -1026,8 +1088,15 @@ function selectAllAvailable() {
             
             addToSelectedList(participantId, participantName);
             participantItem.classList.add('selected');
+            selectedCount++;
         }
     });
+    
+    if (selectedCount === requiredCount) {
+        showSelectionAlert(`Perfect! Selected exactly ${selectedCount} <?php echo $is_solo ? 'players' : 'teams'; ?> needed to fill this group.`, 'success');
+    } else if (selectedCount < requiredCount) {
+        showSelectionAlert(`Selected ${selectedCount} <?php echo $is_solo ? 'players' : 'teams'; ?>. Only ${selectedCount} were available, but ${requiredCount} are needed to fill the group.`, 'warning');
+    }
     
     updateSelectionDisplay();
 }
