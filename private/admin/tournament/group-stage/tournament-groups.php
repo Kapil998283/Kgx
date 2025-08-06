@@ -825,6 +825,22 @@ include '../../includes/admin-header.php';
     background-color: #f8d7da !important;
     border-color: #f5c6cb !important;
 }
+.group-input-row {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    transition: all 0.3s ease;
+}
+.group-input-row:hover {
+    background-color: #e9ecef;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.group-input-row h6 {
+    color: #0d6efd;
+}
+.is-invalid {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
 </style>
 <script>
 let currentGroupData = null;
