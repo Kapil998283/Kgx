@@ -114,9 +114,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         ]);
                         $participants = array_column($participants_data ?: [], 'user_id');
                     } else {
-                        $participants_data = $supabase->select('group_teams', 'team_id', [
+                        $participants_data = $supabase->select('group_participants', 'team_id', [
                             'group_id' => $group_id,
-                            'status' => 'active'
+                            'status' => 'active',
+                            'team_id' => ['not.is', null]
                         ]);
                         $participants = array_column($participants_data ?: [], 'team_id');
                     }
@@ -140,7 +141,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             'map_name' => $map,
                             'kill_points' => $kill_points,
                             'placement_points' => $placement_points_json,
-                            'max_participants' => count($participants),
                             'status' => 'upcoming',
                             'created_at' => date('Y-m-d H:i:s')
                         ];

@@ -1580,7 +1580,7 @@ CREATE TABLE IF NOT EXISTS group_matches (
     round_id INTEGER DEFAULT NULL, -- Links to tournament_rounds if applicable
     match_name VARCHAR(100) NOT NULL,
     match_date TIMESTAMP WITH TIME ZONE NOT NULL,
-    status VARCHAR(20) DEFAULT 'scheduled' CHECK (status IN ('scheduled', 'in_progress', 'completed', 'cancelled')),
+    status VARCHAR(20) DEFAULT 'scheduled' CHECK (status IN ('scheduled', 'upcoming', 'live', 'in_progress', 'completed', 'cancelled')),
     
     -- Match settings
     kill_points INTEGER DEFAULT 2,
@@ -1650,6 +1650,46 @@ CREATE INDEX IF NOT EXISTS idx_group_match_results_tournament ON group_match_res
 CREATE INDEX IF NOT EXISTS idx_group_match_results_team ON group_match_results (team_id);
 CREATE INDEX IF NOT EXISTS idx_group_match_results_user ON group_match_results (user_id);
 CREATE INDEX IF NOT EXISTS idx_group_match_results_status ON group_match_results (status);
+
+-- ============================================================================
+-- GROUP MATCH PARTICIPANTS TABLE (for solo tournaments)
+-- ============================================================================
+-- Tracks individual participants in group matches for solo tournaments
+CREATE TABLE IF NOT EXISTS group_match_participants (
+    id SERIAL PRIMARY KEY,
+    match_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+    status VARCHAR(20) DEFAULT 'registered' CHECK (status IN ('registered', 'participated', 'disqualified', 'no_show')),
+    joined_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (match_id) REFERENCES group_matches(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    UNIQUE (match_id, user_id)
+);
+
+-- Create indexes for group match participants
+CREATE INDEX IF NOT EXISTS idx_group_match_participants_match ON group_match_participants (match_id);
+CREATE INDEX IF NOT EXISTS idx_group_match_participants_user ON group_match_participants (user_id);
+CREATE INDEX IF NOT EXISTS idx_group_match_participants_status ON group_match_participants (status);
+
+-- ============================================================================
+-- GROUP MATCH TEAMS TABLE (for team tournaments)
+-- ============================================================================
+-- Tracks team participants in group matches for team tournaments
+CREATE TABLE IF NOT EXISTS group_match_teams (
+    id SERIAL PRIMARY KEY,
+    match_id INTEGER NOT NULL,
+    team_id INTEGER NOT NULL,
+    status VARCHAR(20) DEFAULT 'registered' CHECK (status IN ('registered', 'participated', 'disqualified', 'no_show')),
+    joined_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (match_id) REFERENCES group_matches(id) ON DELETE CASCADE,
+    FOREIGN KEY (team_id) REFERENCES teams(id) ON DELETE CASCADE,
+    UNIQUE (match_id, team_id)
+);
+
+-- Create indexes for group match teams
+CREATE INDEX IF NOT EXISTS idx_group_match_teams_match ON group_match_teams (match_id);
+CREATE INDEX IF NOT EXISTS idx_group_match_teams_team ON group_match_teams (team_id);
+CREATE INDEX IF NOT EXISTS idx_group_match_teams_status ON group_match_teams (status);
 
 -- ============================================================================
 -- TOURNAMENT PHASES TABLE
