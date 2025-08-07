@@ -55,9 +55,19 @@ if (!$tournament) {
 // Check if this is a solo tournament
 $is_solo = $tournament['mode'] === 'Solo';
 
-// Get tournament groups
-$groups_data = $supabase->select('tournament_groups', '*', ['tournament_id' => $tournament_id], 'group_name.asc');
+// Get tournament groups with round information
+$groups_data = $supabase->select('tournament_groups', '*', ['tournament_id' => $tournament_id], 'round_number.asc,group_name.asc');
 $groups = $groups_data ?: [];
+
+// Group by rounds for multi-round display
+$groups_by_round = [];
+foreach ($groups as $group) {
+    $round_num = $group['round_number'] ?? 1;
+    if (!isset($groups_by_round[$round_num])) {
+        $groups_by_round[$round_num] = [];
+    }
+    $groups_by_round[$round_num][] = $group;
+}
 
 // Selected group for filtering
 $selected_group = null;
@@ -129,10 +139,15 @@ function getGroupStandings($supabase, $group_id, $is_solo) {
         }
     } else {
         // Get all teams in this group with their match results
-        $teams_data = $supabase->select('group_teams', '*', [
+        $teams_data = $supabase->select('group_participants', '*', [
             'group_id' => $group_id,
             'status' => 'active'
         ]);
+        
+        // Filter for team participants only
+        $teams_data = array_filter($teams_data ?: [], function($p) {
+            return !empty($p['team_id']);
+        });
         
         if ($teams_data) {
             foreach ($teams_data as $team_entry) {
@@ -258,6 +273,53 @@ include '../../includes/admin-header.php';
                                     <i class="bi bi-x-circle"></i> Clear Filter
                                 </button>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <!-- Multi-Round Tournament Overview -->
+            <?php if (!$group_id && count($groups_by_round) > 1): ?>
+                <div class="card mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h6 class="mb-0"><i class="bi bi-layers me-2"></i>Multi-Round Tournament Progression</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <?php foreach ($groups_by_round as $round_num => $round_groups): ?>
+                                <div class="col-md-4 mb-3">
+                                    <div class="card border-primary">
+                                        <div class="card-header bg-light">
+                                            <h6 class="mb-0 text-center">Round <?php echo $round_num; ?></h6>
+                                            <small class="text-muted d-block text-center"><?php echo count($round_groups); ?> Groups</small>
+                                        </div>
+                                        <div class="card-body text-center">
+                                            <?php 
+                                            $total_participants = 0;
+                                            foreach ($round_groups as $group) {
+                                                $participants = $supabase->select('group_participants', 'id', [
+                                                    'group_id' => $group['id'],
+                                                    'status' => 'active'
+                                                ]);
+                                                $total_participants += count($participants ?: []);
+                                            }
+                                            ?>
+                                            <h5 class="text-primary"><?php echo $total_participants; ?></h5>
+                                            <small class="text-muted"><?php echo $is_solo ? 'Players' : 'Teams'; ?></small>
+                                            <div class="mt-2">
+                                                <?php foreach ($round_groups as $rg): ?>
+                                                    <span class="badge bg-outline-primary me-1 mb-1"><?php echo htmlspecialchars($rg['group_name']); ?></span>
+                                                <?php endforeach; ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="tournament-rounds-progression.php?id=<?php echo $tournament_id; ?>" class="btn btn-success">
+                                <i class="bi bi-arrow-right-circle"></i> Manage Round Progression
+                            </a>
                         </div>
                     </div>
                 </div>

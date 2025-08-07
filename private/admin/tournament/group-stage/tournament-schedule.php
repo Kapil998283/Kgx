@@ -180,7 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         throw new Exception('Missing required fields for status update');
                     }
                     
-                    $valid_statuses = ['upcoming', 'live', 'completed'];
+                    $valid_statuses = ['scheduled', 'upcoming', 'live', 'in_progress', 'completed', 'cancelled'];
                     if (!in_array($_POST['status'], $valid_statuses)) {
                         throw new Exception('Invalid status value');
                     }
@@ -225,7 +225,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $groups_data = $supabase->select('tournament_groups', '*', ['tournament_id' => $tournament_id], 'group_name.asc');
 $groups = $groups_data ?: [];
 
-// Get matches with participant counts
+// Get ALL matches for group navigation counting (unfiltered)
+$all_matches_data = $supabase->select('group_matches', '*', ['tournament_id' => $tournament_id], 'match_date.asc');
+$all_matches = [];
+if ($all_matches_data) {
+    foreach ($all_matches_data as $match) {
+        // Get group details
+        if ($match['group_id']) {
+            $group_data = $supabase->select('tournament_groups', 'group_name', ['id' => $match['group_id']], null, 1);
+            $match['group_name'] = $group_data ? $group_data[0]['group_name'] : 'Unknown';
+        }
+        
+        // Get participant count
+        if ($is_solo) {
+            $participants_data = $supabase->select('group_match_participants', 'id', ['match_id' => $match['id']]);
+            $match['participant_count'] = count($participants_data ?: []);
+        } else {
+            $participants_data = $supabase->select('group_match_teams', 'id', ['match_id' => $match['id']]);
+            $match['participant_count'] = count($participants_data ?: []);
+        }
+        
+        $all_matches[] = $match;
+    }
+}
+
+// Get matches for display (filtered if group_id is specified)
 $matches_query_conditions = ['tournament_id' => $tournament_id];
 if ($group_id) {
     $matches_query_conditions['group_id'] = $group_id;
@@ -293,6 +317,12 @@ include '../../includes/admin-header.php';
                             <i class="bi bi-plus-circle"></i> Create Matches
                         </button>
                     <?php endif; ?>
+                    <a href="tournament-rounds-progression.php?id=<?php echo $tournament_id; ?>" class="btn btn-info">
+                        <i class="bi bi-arrow-repeat"></i> Multi-Round Progression
+                    </a>
+                    <a href="group-standings.php?id=<?php echo $tournament_id; ?>" class="btn btn-success">
+                        <i class="bi bi-trophy"></i> Standings
+                    </a>
                     <a href="tournament-groups.php?id=<?php echo $tournament_id; ?>" class="btn btn-secondary">
                         <i class="bi bi-arrow-left"></i> Back to Groups
                     </a>
@@ -313,30 +343,118 @@ include '../../includes/admin-header.php';
                 </div>
             <?php endif; ?>
 
-            <!-- Group Filter -->
-            <?php if (!$group_id && !empty($groups)): ?>
+            <!-- Enhanced Group Navigation -->
+            <?php if (!empty($groups)): ?>
                 <div class="card mb-4">
-                    <div class="card-header">
-                        <h6 class="mb-0"><i class="bi bi-funnel"></i> Filter by Group</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <select class="form-select" id="groupFilter" onchange="filterByGroup()">
-                                    <option value="">All Groups</option>
-                                    <?php foreach ($groups as $group): ?>
-                                        <option value="<?php echo $group['id']; ?>" <?php echo ($group_id == $group['id']) ? 'selected' : ''; ?>>
-                                            <?php echo htmlspecialchars($group['group_name']); ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <button class="btn btn-outline-secondary" onclick="clearFilter()">
-                                    <i class="bi bi-x-circle"></i> Clear Filter
-                                </button>
-                            </div>
+                    <div class="card-header bg-gradient" style="background: linear-gradient(135deg, #6c5ce7 0%, #74b9ff 100%);">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0 text-white"><i class="bi bi-collection"></i> Tournament Groups</h6>
+                            <?php if ($group_id): ?>
+                                <a href="tournament-schedule.php?id=<?php echo $tournament_id; ?>" class="btn btn-sm btn-light">
+                                    <i class="bi bi-grid-3x3-gap"></i> View All Groups
+                                </a>
+                            <?php endif; ?>
                         </div>
+                    </div>
+                    <div class="card-body p-3">
+                        <!-- Group Navigation Tabs -->
+                        <div class="row">
+                            <!-- All Groups Tab -->
+                            <div class="col-md-2 col-sm-4 col-6 mb-3">
+                                <a href="tournament-schedule.php?id=<?php echo $tournament_id; ?>" 
+                                   class="group-nav-card <?php echo !$group_id ? 'active' : ''; ?>" 
+                                   style="text-decoration: none; color: inherit;">
+                                    <div class="card h-100 border-2 shadow-sm <?php echo !$group_id ? 'border-primary' : 'border-light'; ?>" 
+                                         style="transition: all 0.3s ease; cursor: pointer;">
+                                        <div class="card-body text-center p-3">
+                                            <div class="mb-2">
+                                                <i class="bi bi-grid-3x3-gap fs-4 <?php echo !$group_id ? 'text-primary' : 'text-muted'; ?>"></i>
+                                            </div>
+                                            <h6 class="card-title mb-1 <?php echo !$group_id ? 'text-primary' : ''; ?>">All Groups</h6>
+                                            <small class="text-muted"><?php echo count($all_matches); ?> matches</small>
+                                            <?php if (!$group_id): ?>
+                                                <div class="mt-2">
+                                                    <span class="badge bg-primary">Active</span>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            
+                            <!-- Individual Group Tabs -->
+                            <?php foreach ($groups as $group): 
+                                // Get matches count for this group using all_matches (unfiltered data)
+                                $group_matches = array_filter($all_matches, fn($m) => $m['group_id'] == $group['id']);
+                                $group_matches_count = count($group_matches);
+                                $completed_matches = count(array_filter($group_matches, fn($m) => $m['status'] === 'completed'));
+                                $is_active_group = ($group_id == $group['id']);
+                            ?>
+                                <div class="col-md-2 col-sm-4 col-6 mb-3">
+                                    <a href="tournament-schedule.php?id=<?php echo $tournament_id; ?>&group_id=<?php echo $group['id']; ?>" 
+                                       class="group-nav-card" style="text-decoration: none; color: inherit;">
+                                        <div class="card h-100 border-2 shadow-sm <?php echo $is_active_group ? 'border-success' : 'border-light'; ?>" 
+                                             style="transition: all 0.3s ease; cursor: pointer;"
+                                             onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)';" 
+                                             onmouseout="this.style.transform='translateY(0px)'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.12)';">
+                                            <div class="card-body text-center p-3">
+                                                <div class="mb-2">
+                                                    <i class="bi bi-people fs-4 <?php echo $is_active_group ? 'text-success' : 'text-muted'; ?>"></i>
+                                                </div>
+                                                <h6 class="card-title mb-1 <?php echo $is_active_group ? 'text-success' : ''; ?>">
+                                                    <?php echo htmlspecialchars($group['group_name']); ?>
+                                                </h6>
+                                                <small class="text-muted d-block">
+                                                    <?php echo $group_matches_count; ?> matches
+                                                </small>
+                                                
+                                                <!-- Progress Bar -->
+                                                <?php if ($group_matches_count > 0): ?>
+                                                    <div class="progress mt-2" style="height: 4px;">
+                                                        <div class="progress-bar bg-success" 
+                                                             style="width: <?php echo ($completed_matches / $group_matches_count) * 100; ?>%"></div>
+                                                    </div>
+                                                    <small class="text-muted">
+                                                        <?php echo $completed_matches; ?>/<?php echo $group_matches_count; ?> complete
+                                                    </small>
+                                                <?php else: ?>
+                                                    <small class="text-warning">No matches</small>
+                                                <?php endif; ?>
+                                                
+                                                <?php if ($is_active_group): ?>
+                                                    <div class="mt-2">
+                                                        <span class="badge bg-success">Viewing</span>
+                                                    </div>
+                                                <?php endif; ?>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                        
+                        <!-- Quick Actions for Selected Group -->
+                        <?php if ($selected_group): ?>
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <div class="alert alert-info d-flex align-items-center">
+                                        <i class="bi bi-info-circle me-2"></i>
+                                        <div class="flex-grow-1">
+                                            <strong>Viewing <?php echo htmlspecialchars($selected_group['group_name']); ?></strong>
+                                            <br><small>Managing matches for this group only</small>
+                                        </div>
+                                        <div class="btn-group btn-group-sm ms-3">
+                                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createMatchesModal">
+                                                <i class="bi bi-plus-circle"></i> Add Matches
+                                            </button>
+                                            <a href="group-standings.php?group_id=<?php echo $selected_group['id']; ?>" class="btn btn-outline-primary">
+                                                <i class="bi bi-trophy"></i> Standings
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             <?php endif; ?>
@@ -354,7 +472,7 @@ include '../../includes/admin-header.php';
                 <div class="col-md-3">
                     <div class="card text-center">
                         <div class="card-body">
-                            <h5 class="card-title text-success"><?php echo count(array_filter($matches, fn($m) => $m['status'] === 'completed')); ?></h5>
+                            <h5 class="card-title text-success"><?php echo count(array_filter($group_id ? $matches : $all_matches, fn($m) => $m['status'] === 'completed')); ?></h5>
                             <p class="card-text">Completed</p>
                         </div>
                     </div>
@@ -362,7 +480,7 @@ include '../../includes/admin-header.php';
                 <div class="col-md-3">
                     <div class="card text-center">
                         <div class="card-body">
-                            <h5 class="card-title text-warning"><?php echo count(array_filter($matches, fn($m) => $m['status'] === 'live')); ?></h5>
+                            <h5 class="card-title text-warning"><?php echo count(array_filter($group_id ? $matches : $all_matches, fn($m) => in_array($m['status'], ['live', 'in_progress']))); ?></h5>
                             <p class="card-text">Live Now</p>
                         </div>
                     </div>
@@ -370,7 +488,7 @@ include '../../includes/admin-header.php';
                 <div class="col-md-3">
                     <div class="card text-center">
                         <div class="card-body">
-                            <h5 class="card-title text-info"><?php echo count(array_filter($matches, fn($m) => $m['status'] === 'upcoming')); ?></h5>
+                            <h5 class="card-title text-info"><?php echo count(array_filter($group_id ? $matches : $all_matches, fn($m) => $m['status'] === 'upcoming')); ?></h5>
                             <p class="card-text">Upcoming</p>
                         </div>
                     </div>
@@ -435,9 +553,12 @@ include '../../includes/admin-header.php';
                                 <td>
                                     <span class="badge bg-<?php 
                                         echo match($match['status']) {
+                                            'scheduled' => 'secondary',
                                             'upcoming' => 'primary',
                                             'live' => 'success',
-                                            'completed' => 'secondary',
+                                            'in_progress' => 'warning',
+                                            'completed' => 'dark',
+                                            'cancelled' => 'danger',
                                             default => 'info'
                                         };
                                     ?>">
@@ -452,9 +573,12 @@ include '../../includes/admin-header.php';
                                             </button>
                                             <ul class="dropdown-menu">
                                                 <li><h6 class="dropdown-header">Status</h6></li>
+                                                <li><a class="dropdown-item" href="#" onclick="updateMatchStatus(<?php echo $match['id']; ?>, 'scheduled')">Mark Scheduled</a></li>
                                                 <li><a class="dropdown-item" href="#" onclick="updateMatchStatus(<?php echo $match['id']; ?>, 'upcoming')">Mark Upcoming</a></li>
                                                 <li><a class="dropdown-item" href="#" onclick="updateMatchStatus(<?php echo $match['id']; ?>, 'live')">Mark Live</a></li>
+                                                <li><a class="dropdown-item" href="#" onclick="updateMatchStatus(<?php echo $match['id']; ?>, 'in_progress')">Mark In Progress</a></li>
                                                 <li><a class="dropdown-item" href="#" onclick="updateMatchStatus(<?php echo $match['id']; ?>, 'completed')">Mark Completed</a></li>
+                                                <li><a class="dropdown-item" href="#" onclick="updateMatchStatus(<?php echo $match['id']; ?>, 'cancelled')">Mark Cancelled</a></li>
                                                 <li><hr class="dropdown-divider"></li>
                                                 <li><a class="dropdown-item text-danger" href="#" onclick="deleteMatch(<?php echo $match['id']; ?>, '<?php echo htmlspecialchars($match['match_name']); ?>')">Delete Match</a></li>
                                             </ul>

@@ -40,6 +40,7 @@ require_once ADMIN_INCLUDES_PATH . 'admin-auth.php';
 $supabase = new SupabaseClient(true);
 
 $tournament_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+$round_number = isset($_GET['round']) ? (int)$_GET['round'] : null;
 
 // Get tournament details
 $tournament_data = $supabase->select('tournaments', '*', ['id' => $tournament_id], null, 1);
@@ -80,6 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             'tournament_id' => $tournament_id,
                             'group_name' => $_POST['group_name'],
                             'group_number' => $next_group_number,
+                            'round_number' => $round_number,
                             'max_teams' => $_POST['max_participants'],
                             'status' => 'forming',
                             'created_at' => date('Y-m-d H:i:s')
@@ -110,6 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     'tournament_id' => $tournament_id,
                                     'group_name' => $group_data['name'],
                                     'group_number' => $next_group_number,
+                                    'round_number' => $round_number,
                                     'max_teams' => (int)$group_data['max_participants'],
                                     'status' => 'forming',
                                     'created_at' => date('Y-m-d H:i:s')
@@ -228,8 +231,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit();
 }
 
-// Get tournament groups with participant counts
-$groups_data = $supabase->select('tournament_groups', '*', ['tournament_id' => $tournament_id], 'group_name.asc');
+// Get all rounds for this tournament for navigation
+$all_rounds_data = $supabase->select('tournament_groups', 'round_number', ['tournament_id' => $tournament_id], 'round_number.asc');
+$available_rounds = [];
+if ($all_rounds_data) {
+    // Extract unique round numbers
+    $unique_rounds = array_unique(array_column($all_rounds_data, 'round_number'));
+    sort($unique_rounds);
+    $available_rounds = $unique_rounds;
+}
+if (empty($available_rounds)) {
+    $available_rounds = [1]; // Default to round 1 if no rounds found
+}
+
+// If no specific round is selected, default to the latest (current) round
+if ($round_number === null) {
+    $round_number = !empty($available_rounds) ? max($available_rounds) : 1;
+}
+
+// Get tournament groups for the selected round
+$groups_query_conditions = ['tournament_id' => $tournament_id];
+if ($round_number !== null) {
+    $groups_query_conditions['round_number'] = $round_number;
+}
+$groups_data = $supabase->select('tournament_groups', '*', $groups_query_conditions, 'group_name.asc');
 $groups = [];
 if ($groups_data) {
     foreach ($groups_data as $group) {
@@ -240,14 +265,92 @@ if ($groups_data) {
             $group['participant_count'] = count($participants_data ?: []);
         } else {
             // For team tournaments, get teams from group_participants (same table, different column)
-            $teams_data = $supabase->select('group_participants', '*', ['group_id' => $group['id'], 'status' => 'active', 'team_id' => ['not.is', null]]);
-            $group['participants'] = $teams_data ?: [];
-            $group['participant_count'] = count($teams_data ?: []);
+            try {
+                $teams_data = $supabase->select('group_participants', '*', [
+                    'group_id' => $group['id'], 
+                    'status' => 'active'
+                ]);
+                
+                // Filter for team participants (where team_id is not null)
+                $filtered_teams = [];
+                if ($teams_data) {
+                    foreach ($teams_data as $participant) {
+                        if (!empty($participant['team_id'])) {
+                            $filtered_teams[] = $participant;
+                        }
+                    }
+                }
+                
+                $group['participants'] = $filtered_teams;
+                $group['participant_count'] = count($filtered_teams);
+            } catch (Exception $e) {
+                error_log("Error fetching team participants for group {$group['id']}: " . $e->getMessage());
+                $group['participants'] = [];
+                $group['participant_count'] = 0;
+            }
         }
         
-        // Get group matches count
-        $matches_data = $supabase->select('group_matches', 'id', ['group_id' => $group['id']]);
+        // Get group matches count and completion status
+        $matches_data = $supabase->select('group_matches', 'id, status', ['group_id' => $group['id']]);
         $group['matches_count'] = count($matches_data ?: []);
+        
+        // Count completed matches and determine group status
+        $completed_matches = 0;
+        $in_progress_matches = 0;
+        $live_matches = 0;
+        $upcoming_matches = 0;
+        
+        if ($matches_data) {
+            foreach ($matches_data as $match) {
+                switch ($match['status']) {
+                    case 'completed':
+                        $completed_matches++;
+                        break;
+                    case 'in_progress':
+                        $in_progress_matches++;
+                        break;
+                    case 'live':
+                        $live_matches++;
+                        break;
+                    case 'upcoming':
+                    case 'scheduled':
+                        $upcoming_matches++;
+                        break;
+                }
+            }
+        }
+        
+        $group['completed_matches'] = $completed_matches;
+        
+        // Automatically determine and update group status based on matches
+        $auto_status = 'forming'; // Default status
+        
+        if ($group['matches_count'] > 0) {
+            if ($in_progress_matches > 0 || $live_matches > 0) {
+                $auto_status = 'in_progress';
+            } elseif ($completed_matches === $group['matches_count'] && $group['matches_count'] > 0) {
+                $auto_status = 'completed';
+            } elseif ($upcoming_matches > 0 || $completed_matches > 0) {
+                $auto_status = 'ready';
+            }
+        } elseif ($group['participant_count'] >= 2) {
+            // If group has participants but no matches yet, it's ready for match creation
+            $auto_status = 'ready';
+        }
+        
+        // Update group status in database if it's different from current
+        if ($group['status'] !== $auto_status) {
+            try {
+                $supabase->update('tournament_groups', [
+                    'status' => $auto_status,
+                    'updated_at' => date('Y-m-d H:i:s')
+                ], ['id' => $group['id']]);
+                $group['status'] = $auto_status; // Update for display
+            } catch (Exception $e) {
+                error_log("Error updating group status for group {$group['id']}: " . $e->getMessage());
+                // Continue with original status if update fails
+            }
+        }
         
         $groups[] = $group;
     }
@@ -283,6 +386,29 @@ if ($is_solo) {
                 'status' => 'active'
             ]);
             $total_players_count += count($team_members ?: []);
+        }
+    }
+}
+
+// Check if any matches are in progress or live to hide reset button
+$has_active_matches = false;
+if ($groups) {
+    foreach ($groups as $group) {
+        // Check for matches with 'in_progress' status
+        $in_progress_matches = $supabase->select('group_matches', 'id', [
+            'group_id' => $group['id'],
+            'status' => 'in_progress'
+        ]);
+        
+        // Check for matches with 'live' status
+        $live_matches = $supabase->select('group_matches', 'id', [
+            'group_id' => $group['id'],
+            'status' => 'live'
+        ]);
+        
+        if (!empty($in_progress_matches) || !empty($live_matches)) {
+            $has_active_matches = true;
+            break;
         }
     }
 }
@@ -351,17 +477,58 @@ include '../../includes/admin-header.php';
                 <div>
                     <h1>Group Stage Management</h1>
                     <h5 class="text-muted"><?php echo htmlspecialchars($tournament['name']); ?> (<?php echo $tournament['game_name']; ?>)</h5>
+                    <!-- Always show current round info -->
+                    <div class="mt-3">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge bg-info fs-6">Round <?php echo $round_number; ?></span>
+                            <?php if (count($available_rounds) > 1): ?>
+                                <small class="text-muted">of <?php echo max($available_rounds); ?> rounds</small>
+                            <?php else: ?>
+                                <small class="text-muted">Single Round Tournament</small>
+                            <?php endif; ?>
+                        </div>
+                        
+                        <?php if (count($available_rounds) > 1): ?>
+                            <div class="mt-2">
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <?php foreach ($available_rounds as $round): ?>
+                                        <a href="tournament-groups.php?id=<?php echo $tournament_id; ?>&round=<?php echo $round; ?>"
+                                           class="btn <?php echo ($round == $round_number) ? 'btn-primary' : 'btn-outline-primary'; ?>">
+                                            Round <?php echo $round; ?>
+                                        </a>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    </div>
                 </div>
                 <div class="btn-group">
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createGroupModal">
-                        <i class="bi bi-plus-circle"></i> Create Group
-                    </button>
+                    <?php if (count($available_participants) > 0): ?>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createGroupModal">
+                            <i class="bi bi-plus-circle"></i> Create Group
+                        </button>
+                    <?php else: ?>
+                        <button class="btn btn-secondary" disabled title="No unassigned <?php echo $is_solo ? 'players' : 'teams'; ?> available for new groups" 
+                                onclick="showCreateGroupAlert()">
+                            <i class="bi bi-plus-circle"></i> Create Group
+                        </button>
+                    <?php endif; ?>
                     <a href="tournament-schedule.php?id=<?php echo $tournament_id; ?>" class="btn btn-info">
                         <i class="bi bi-calendar"></i> Schedule
                     </a>
-                    <?php if (!empty($groups)): ?>
+                    <a href="tournament-rounds-progression.php?id=<?php echo $tournament_id; ?>" class="btn btn-success">
+                        <i class="bi bi-layers"></i> Multi-Round Progression
+                    </a>
+                    <a href="group-standings.php?id=<?php echo $tournament_id; ?>" class="btn btn-outline-primary">
+                        <i class="bi bi-award"></i> Standings
+                    </a>
+                    <?php if (!empty($groups) && !$has_active_matches): ?>
                     <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#resetAllAssignmentsModal">
                         <i class="bi bi-arrow-clockwise"></i> Reset All Assignments
+                    </button>
+                    <?php elseif (!empty($groups) && $has_active_matches): ?>
+                    <button class="btn btn-secondary" disabled title="Cannot reset assignments while matches are in progress or live">
+                        <i class="bi bi-lock"></i> Reset Disabled
                     </button>
                     <?php endif; ?>
                 </div>
@@ -380,6 +547,16 @@ include '../../includes/admin-header.php';
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             <?php endif; ?>
+
+            <!-- Alert container for dynamic messages -->
+            <div id="dynamicAlertContainer" style="display: none;">
+                <div id="dynamicAlert" class="alert alert-dismissible fade show">
+                    <i id="alertIcon" class="bi"></i>
+                    <strong id="alertTitle"></strong> 
+                    <span id="alertMessage"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            </div>
 
             <!-- Groups Overview -->
             <div class="row mb-4">
@@ -408,9 +585,20 @@ include '../../includes/admin-header.php';
                     </div>
                 </div>
                 <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3">
-                    <div class="card text-center">
+                    <div class="card text-center position-relative">
+                        <?php 
+                            $total_matches = array_sum(array_column($groups, 'matches_count'));
+                            $total_completed = array_sum(array_column($groups, 'completed_matches'));
+                        ?>
+                        <?php if ($total_matches > 0): ?>
+                            <div class="position-absolute top-0 end-0 m-2">
+                                <span class="badge bg-<?php echo ($total_completed == $total_matches) ? 'success' : 'primary'; ?> rounded-pill" style="font-size: 0.7rem;">
+                                    <?php echo round(($total_completed / $total_matches) * 100); ?>%
+                                </span>
+                            </div>
+                        <?php endif; ?>
                         <div class="card-body py-3">
-                            <h5 class="card-title text-info"><?php echo array_sum(array_column($groups, 'matches_count')); ?></h5>
+                            <h5 class="card-title text-info"><?php echo $total_completed; ?> / <?php echo $total_matches; ?></h5>
                             <p class="card-text small">Total Matches</p>
                         </div>
                     </div>
@@ -437,6 +625,7 @@ include '../../includes/admin-header.php';
                     <thead>
                         <tr>
                             <th>Group</th>
+                            <th>Round</th>
                             <th><?php echo $is_solo ? 'Players' : 'Teams'; ?></th>
                             <th>Matches</th>
                             <th>Status</th>
@@ -446,7 +635,7 @@ include '../../includes/admin-header.php';
                     <tbody>
                         <?php if (empty($groups)): ?>
                             <tr>
-                                <td colspan="5" class="text-center text-muted py-4">
+                                <td colspan="6" class="text-center text-muted py-4">
                                     <i class="bi bi-inbox"></i><br>
                                     No groups created yet. Click "Create Group" to start.
                                 </td>
@@ -458,11 +647,26 @@ include '../../includes/admin-header.php';
                                     <strong><?php echo htmlspecialchars($group['group_name']); ?></strong>
                                 </td>
                                 <td>
+                                    <span class="badge bg-secondary">R<?php echo $group['round_number'] ?? $round_number; ?></span>
+                                </td>
+                                <td>
                                     <?php echo $group['participant_count']; ?> / <?php echo $group['max_teams']; ?>
                                     <br><small class="text-muted"><?php echo $is_solo ? 'Players' : 'Teams'; ?></small>
                                 </td>
                                 <td>
-                                    <span class="badge bg-info"><?php echo $group['matches_count']; ?></span>
+                                    <?php if ($group['matches_count'] > 0): ?>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span class="badge bg-<?php echo ($group['completed_matches'] == $group['matches_count']) ? 'success' : 'info'; ?>">
+                                                <?php echo $group['completed_matches']; ?> / <?php echo $group['matches_count']; ?>
+                                            </span>
+                                            <div class="progress" style="width: 50px; height: 6px;">
+                                                <div class="progress-bar bg-success" style="width: <?php echo ($group['completed_matches'] / $group['matches_count']) * 100; ?>%"></div>
+                                            </div>
+                                        </div>
+                                    <?php else: ?>
+                                        <span class="badge bg-secondary">0</span>
+                                        <br><small class="text-muted">No matches</small>
+                                    <?php endif; ?>
                                 </td>
                                 <td>
                                     <span class="badge bg-<?php 
@@ -482,9 +686,15 @@ include '../../includes/admin-header.php';
                                         <button class="btn btn-outline-primary" onclick='editGroup(<?php echo json_encode($group); ?>)' title="Edit Group">
                                             <i class="bi bi-pencil"></i>
                                         </button>
-                                        <button class="btn btn-outline-success" onclick="assignParticipants(<?php echo $group['id']; ?>, '<?php echo htmlspecialchars($group['group_name']); ?>')" title="Assign <?php echo $is_solo ? 'Players' : 'Teams'; ?>">
-                                            <i class="bi bi-people"></i>
-                                        </button>
+                                        <?php if ($group['participant_count'] < $group['max_teams'] || count($available_participants) > 0): ?>
+                                            <button class="btn btn-outline-success" onclick="assignParticipants(<?php echo $group['id']; ?>, '<?php echo htmlspecialchars($group['group_name']); ?>')" title="Assign <?php echo $is_solo ? 'Players' : 'Teams'; ?>">
+                                                <i class="bi bi-people"></i>
+                                            </button>
+                                        <?php else: ?>
+                                            <button class="btn btn-outline-secondary" disabled title="Group is full and no unassigned <?php echo $is_solo ? 'players' : 'teams'; ?> available">
+                                                <i class="bi bi-people"></i>
+                                            </button>
+                                        <?php endif; ?>
                                         <a href="tournament-schedule.php?id=<?php echo $tournament_id; ?>&group_id=<?php echo $group['id']; ?>" class="btn btn-outline-info" title="Manage Matches">
                                             <i class="bi bi-calendar-event"></i>
                                         </a>
@@ -1151,6 +1361,28 @@ function showSelectionAlert(message, type) {
 function hideSelectionAlert() {
     const alert = document.getElementById('selectionAlert');
     alert.style.display = 'none';
+}
+
+function showCreateGroupAlert() {
+    const alertContainer = document.getElementById('dynamicAlertContainer');
+    const alertElement = document.getElementById('dynamicAlert');
+    const alertIcon = document.getElementById('alertIcon');
+    const alertTitle = document.getElementById('alertTitle');
+    const alertMessage = document.getElementById('alertMessage');
+    
+    // Set alert content
+    alertElement.className = 'alert alert-info alert-dismissible fade show';
+    alertIcon.className = 'bi bi-info-circle';
+    alertTitle.textContent = 'Cannot Create Group';
+    alertMessage.innerHTML = 'All registered <?php echo $is_solo ? "players" : "teams"; ?> are already assigned to groups. <?php if ($total_registered === 0): ?>Please wait for participants to register for the tournament first.<?php else: ?>You can increase group capacities or manage existing groups to make room for new participants.<?php endif; ?>';
+    
+    // Show the alert
+    alertContainer.style.display = 'block';
+    
+    // Auto-hide after 5 seconds
+    setTimeout(() => {
+        alertContainer.style.display = 'none';
+    }, 5000);
 }
 
 function deleteGroup(groupId, groupName) {

@@ -1659,8 +1659,20 @@ CREATE TABLE IF NOT EXISTS group_match_participants (
     id SERIAL PRIMARY KEY,
     match_id INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
+    
+    -- Performance stats
+    placement INTEGER DEFAULT NULL,
+    kills INTEGER DEFAULT 0,
+    kill_points INTEGER DEFAULT 0,
+    placement_points INTEGER DEFAULT 0,
+    bonus_points INTEGER DEFAULT 0,
+    total_points INTEGER DEFAULT 0,
+    
+    -- Status and timestamps
     status VARCHAR(20) DEFAULT 'registered' CHECK (status IN ('registered', 'participated', 'disqualified', 'no_show')),
     joined_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    
     FOREIGN KEY (match_id) REFERENCES group_matches(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     UNIQUE (match_id, user_id)
@@ -1679,8 +1691,20 @@ CREATE TABLE IF NOT EXISTS group_match_teams (
     id SERIAL PRIMARY KEY,
     match_id INTEGER NOT NULL,
     team_id INTEGER NOT NULL,
+    
+    -- Performance stats
+    placement INTEGER DEFAULT NULL,
+    kills INTEGER DEFAULT 0,
+    kill_points INTEGER DEFAULT 0,
+    placement_points INTEGER DEFAULT 0,
+    bonus_points INTEGER DEFAULT 0,
+    total_points INTEGER DEFAULT 0,
+    
+    -- Status and timestamps
     status VARCHAR(20) DEFAULT 'registered' CHECK (status IN ('registered', 'participated', 'disqualified', 'no_show')),
     joined_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    
     FOREIGN KEY (match_id) REFERENCES group_matches(id) ON DELETE CASCADE,
     FOREIGN KEY (team_id) REFERENCES teams(id) ON DELETE CASCADE,
     UNIQUE (match_id, team_id)
@@ -1690,6 +1714,8 @@ CREATE TABLE IF NOT EXISTS group_match_teams (
 CREATE INDEX IF NOT EXISTS idx_group_match_teams_match ON group_match_teams (match_id);
 CREATE INDEX IF NOT EXISTS idx_group_match_teams_team ON group_match_teams (team_id);
 CREATE INDEX IF NOT EXISTS idx_group_match_teams_status ON group_match_teams (status);
+CREATE INDEX IF NOT EXISTS idx_group_match_teams_placement ON group_match_teams (placement);
+CREATE INDEX IF NOT EXISTS idx_group_match_teams_total_points ON group_match_teams (total_points);
 
 -- ============================================================================
 -- TOURNAMENT PHASES TABLE
@@ -2427,6 +2453,14 @@ CREATE TRIGGER update_tournament_phases_updated_at
 CREATE TRIGGER update_phase_participants_updated_at 
     BEFORE UPDATE ON phase_participants 
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    
+CREATE TRIGGER update_group_match_participants_updated_at 
+    BEFORE UPDATE ON group_match_participants 
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+    
+CREATE TRIGGER update_group_match_teams_updated_at 
+    BEFORE UPDATE ON group_match_teams 
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 -- ============================================================================
 -- COMMENTS AND DOCUMENTATION FOR NEW TABLES
@@ -2455,4 +2489,147 @@ COMMENT ON COLUMN phase_participants.qualified_from_phase_id IS 'Which phase thi
 
 -- ============================================================================
 -- END OF TOURNAMENT FORMATS EXTENSION
+-- ============================================================================
+
+-- ============================================================================
+-- MULTI-ROUND GROUP STAGE PROGRESSION - SCHEMA UPDATES
+-- ============================================================================
+-- Added: 2025-01-06 for BMPS-style multi-round tournament progression
+-- Enables tournaments where players advance through multiple rounds with group redistribution
+
+-- ============================================================================
+-- 1. ADD ROUND_NUMBER COLUMN TO TOURNAMENT_GROUPS TABLE
+-- ============================================================================
+-- Add round_number to track which round each group belongs to
+ALTER TABLE tournament_groups 
+ADD COLUMN IF NOT EXISTS round_number INTEGER DEFAULT 1;
+
+-- Add index for better query performance
+CREATE INDEX IF NOT EXISTS idx_tournament_groups_round 
+ON tournament_groups (tournament_id, round_number);
+
+-- Add previous round tracking columns to group_participants
+ALTER TABLE group_participants 
+ADD COLUMN IF NOT EXISTS previous_round_rank INTEGER DEFAULT NULL,
+ADD COLUMN IF NOT EXISTS previous_round_points INTEGER DEFAULT 0;
+
+-- ============================================================================
+-- 2. CREATE TOURNAMENT_RESULTS TABLE
+-- ============================================================================
+-- Stores final tournament results and winner information
+CREATE TABLE IF NOT EXISTS tournament_results (
+    id SERIAL PRIMARY KEY,
+    tournament_id INTEGER NOT NULL,
+    participant_id INTEGER NOT NULL, -- Can be user_id or team_id depending on mode
+    participant_type VARCHAR(10) NOT NULL CHECK (participant_type IN ('user', 'team')),
+    final_position INTEGER NOT NULL,
+    total_points INTEGER DEFAULT 0,
+    total_kills INTEGER DEFAULT 0,
+    total_matches INTEGER DEFAULT 0,
+    best_placement INTEGER DEFAULT NULL,
+    rounds_survived INTEGER DEFAULT 0,
+    prize_amount DECIMAL(10,2) DEFAULT 0.00,
+    prize_currency VARCHAR(10) DEFAULT 'USD' CHECK (prize_currency IN ('USD', 'INR')),
+    website_currency_awarded INTEGER DEFAULT 0, -- Tickets or coins awarded
+    website_currency_type VARCHAR(20) DEFAULT 'tickets' CHECK (website_currency_type IN ('tickets', 'coins')),
+    status VARCHAR(20) DEFAULT 'declared' CHECK (status IN ('declared', 'prize_pending', 'prize_paid')),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (tournament_id) REFERENCES tournaments(id) ON DELETE CASCADE,
+    UNIQUE (tournament_id, participant_id, participant_type),
+    UNIQUE (tournament_id, final_position)
+);
+
+-- Create indexes for tournament results
+CREATE INDEX IF NOT EXISTS idx_tournament_results_tournament ON tournament_results (tournament_id);
+CREATE INDEX IF NOT EXISTS idx_tournament_results_participant ON tournament_results (participant_id, participant_type);
+CREATE INDEX IF NOT EXISTS idx_tournament_results_position ON tournament_results (tournament_id, final_position);
+
+-- ============================================================================
+-- 3. UPDATE EXISTING TOURNAMENT_GROUPS FOR ROUND 1
+-- ============================================================================
+-- Update existing groups to be marked as Round 1
+UPDATE tournament_groups 
+SET round_number = 1 
+WHERE round_number IS NULL;
+
+-- ============================================================================
+-- 4. ADD TRIGGER FOR UPDATED_AT TIMESTAMPS
+-- ============================================================================
+-- Add trigger for the tournament_results table
+CREATE TRIGGER update_tournament_results_updated_at 
+    BEFORE UPDATE ON tournament_results 
+    FOR EACH ROW 
+    EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================================
+-- 5. ADD COMMENTS FOR DOCUMENTATION
+-- ============================================================================
+COMMENT ON COLUMN tournament_groups.round_number IS 'Which round this group belongs to (1, 2, 3, etc.) for multi-round tournaments';
+COMMENT ON COLUMN group_participants.previous_round_rank IS 'Rank achieved in the previous round (for tracking progression)';
+COMMENT ON COLUMN group_participants.previous_round_points IS 'Points earned in the previous round (for tracking progression)';
+
+COMMENT ON TABLE tournament_results IS 'Final tournament results and prize information for completed tournaments';
+COMMENT ON COLUMN tournament_results.participant_type IS 'Indicates whether participant_id refers to a user (solo) or team';
+COMMENT ON COLUMN tournament_results.rounds_survived IS 'Number of rounds the participant survived before elimination or completion';
+COMMENT ON COLUMN tournament_results.website_currency_awarded IS 'Additional website currency (tickets/coins) awarded to winners';
+
+-- ============================================================================
+-- 6. CREATE VIEW FOR TOURNAMENT PROGRESSION OVERVIEW
+-- ============================================================================
+CREATE OR REPLACE VIEW tournament_progression_overview AS
+SELECT 
+    t.id as tournament_id,
+    t.name as tournament_name,
+    t.mode,
+    t.format,
+    tg.round_number,
+    COUNT(DISTINCT tg.id) as groups_in_round,
+    SUM(tg.current_teams) as participants_in_round,
+    COUNT(CASE WHEN tg.status = 'completed' THEN 1 END) as completed_groups,
+    COUNT(CASE WHEN tg.status = 'in_progress' THEN 1 END) as active_groups,
+    COUNT(CASE WHEN tg.status = 'ready' THEN 1 END) as ready_groups,
+    MIN(tg.created_at) as round_created_at,
+    MAX(tg.updated_at) as round_updated_at
+FROM tournaments t
+JOIN tournament_groups tg ON t.id = tg.tournament_id
+WHERE t.format = 'Group Stage'
+GROUP BY t.id, t.name, t.mode, t.format, tg.round_number
+ORDER BY t.id, tg.round_number;
+
+-- Set view to use SECURITY INVOKER mode
+ALTER VIEW tournament_progression_overview SET (security_invoker = true);
+
+-- ============================================================================
+-- MULTI-ROUND PROGRESSION IMPLEMENTATION NOTES
+-- ============================================================================
+-- 
+-- How Multi-Round Tournaments Work:
+-- 
+-- 1. ROUND 1: All participants compete in initial groups (round_number = 1)
+--    Example: 36 players in 6 groups (A-F) with 6 players each
+-- 
+-- 2. ROUND 2: Top performers advance to new redistributed groups (round_number = 2) 
+--    Example: Top 3 from each group = 18 players in 3 new groups (A-C) with 6 players each
+-- 
+-- 3. ROUND 3+: Continue progression with fewer participants each round
+--    Example: Top 2 from each group = 6 players in 1 final group
+-- 
+-- 4. FINALS: Final round determines winners, results stored in tournament_results
+-- 
+-- The PHP system (tournament-rounds-progression.php) handles:
+-- - Creating new groups for each round
+-- - Selecting top performers from previous round 
+-- - Snake draft distribution for balanced competition
+-- - Final result calculation and prize distribution
+-- 
+-- Database tracks:
+-- - tournament_groups.round_number: Which round each group belongs to
+-- - group_participants.previous_round_rank: How participant performed in previous round
+-- - group_participants.previous_round_points: Points earned in previous round
+-- - tournament_results: Final rankings and prize information
+--
+-- ============================================================================
+-- END OF MULTI-ROUND PROGRESSION UPDATES
 -- ============================================================================

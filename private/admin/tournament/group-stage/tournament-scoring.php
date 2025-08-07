@@ -150,19 +150,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     throw new Exception('Failed to update results for participant ' . $participant_id);
                 }
 
-                // Update overall tournament scores
+                // Update overall tournament scores using existing RPC functions
                 if ($is_match_solo) {
-                    $supabase->rpc('increment_user_tournament_score', [
-                        'user_id_param' => $participant_id, 
-                        'increment_by' => $total_points, 
-                        'tournament_id_param' => $match['tournament_id']
-                    ]);
+                    try {
+                        $supabase->rpc('increment_user_score', [
+                            'user_id_param' => $participant_id, 
+                            'increment_by' => $total_points, 
+                            'tournament_id_param' => $match['tournament_id']
+                        ]);
+                    } catch (Exception $e) {
+                        error_log("Failed to update user score via RPC: " . $e->getMessage());
+                        // Continue without RPC update - not critical for match scoring
+                    }
                 } else {
-                    $supabase->rpc('increment_team_tournament_score', [
-                        'team_id_param' => $participant_id, 
-                        'increment_by' => $total_points,
-                        'tournament_id_param' => $match['tournament_id']
-                    ]);
+                    try {
+                        $supabase->rpc('increment_team_score', [
+                            'team_id_param' => $participant_id, 
+                            'increment_by' => $total_points
+                        ]);
+                    } catch (Exception $e) {
+                        error_log("Failed to update team score via RPC: " . $e->getMessage());
+                        // Continue without RPC update - not critical for match scoring
+                    }
                 }
 
                 // Send notifications if available
@@ -250,9 +259,37 @@ include '../../includes/admin-header.php';
                     </p>
                 </div>
                 <div class="btn-group">
-                    <a href="tournament-schedule.php?id=<?php echo $tournament['id']; ?>" class="btn btn-outline-secondary">
-                        <i class="bi bi-arrow-left"></i> Back to Schedule
-                    </a>
+                    <?php if ($group): ?>
+                        <a href="tournament-schedule.php?id=<?php echo $tournament['id']; ?>&group_id=<?php echo $group['id']; ?>" class="btn btn-outline-primary">
+                            <i class="bi bi-arrow-left"></i> Back to <?php echo htmlspecialchars($group['group_name']); ?>
+                        </a>
+                    <?php endif; ?>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="bi bi-list"></i> More Options
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><h6 class="dropdown-header"><i class="bi bi-navigation"></i> Navigate To</h6></li>
+                            <li><a class="dropdown-item" href="tournament-schedule.php?id=<?php echo $tournament['id']; ?>">
+                                <i class="bi bi-calendar-week"></i> All Groups Schedule
+                            </a></li>
+                            <?php if ($group): ?>
+                                <li><a class="dropdown-item" href="tournament-schedule.php?id=<?php echo $tournament['id']; ?>&group_id=<?php echo $group['id']; ?>">
+                                    <i class="bi bi-people"></i> <?php echo htmlspecialchars($group['group_name']); ?> Matches
+                                </a></li>
+                                <li><a class="dropdown-item" href="group-standings.php?group_id=<?php echo $group['id']; ?>">
+                                    <i class="bi bi-trophy"></i> <?php echo htmlspecialchars($group['group_name']); ?> Standings
+                                </a></li>
+                            <?php endif; ?>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="tournament-groups.php?id=<?php echo $tournament['id']; ?>">
+                                <i class="bi bi-diagram-3"></i> Tournament Groups
+                            </a></li>
+                            <li><a class="dropdown-item" href="../index.php">
+                                <i class="bi bi-house"></i> Tournament Dashboard
+                            </a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
